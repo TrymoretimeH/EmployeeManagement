@@ -1,0 +1,25 @@
+<nz-table [nzData]="Department" #DepartmentTable>
+    <button class="dep-btn-add" nz-button nzType="primary" nzSize="large" nzShape="circle">
+      <span nz-icon nzType="plus"></span>
+    </button>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Manager ID</th>
+          <th nzRight>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of DepartmentTable.data">
+          <td>{{ data.departmentId }}</td>
+          <td>{{ data.departmentName }}</td>
+          <td>{{ data.description }}</td>
+          <td>{{ data.managerId }}</td>
+          <td>
+            <a>action</a>
+          </td>
+        </tr>
+      </tbody>
+    </nz-table>

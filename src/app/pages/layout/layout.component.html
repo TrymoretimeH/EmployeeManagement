@@ -1,0 +1,49 @@
+<nz-layout class="layout-wrapper">
+    <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+      <div [className]="isCollapsed ? 'logo logo-fold' : 'logo'" routerLink="dashboard">
+        <span nz-icon nzType="poweroff" nzTheme="outline"></span>
+      </div>
+      <ul nz-menu nzTheme="dark" nzMode="inline">
+        <li nz-menu-item routerLink="/employees">
+          <span nz-icon nzType="team"></span>
+          <span>Employees</span>
+        </li>
+        <!-- <li nz-submenu nzTitle="Team" nzIcon="team">
+          <ul>
+            <li nz-menu-item>Team 1</li>
+            <li nz-menu-item>Team 2</li>
+          </ul>
+        </li> -->
+        <li nz-menu-item routerLink="/departments">
+          <span nz-icon nzType="apartment"></span>
+          <span>Departments</span>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <span
+          class="trigger"
+          nz-icon
+          [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"
+          (click)="isCollapsed = !isCollapsed"
+        ></span>
+        Employee Management
+      </nz-header>
+      <nz-content class="layout-content">
+        <app-breadcrumb></app-breadcrumb>
+        <!-- <nz-breadcrumb>
+          <ng-container *ngFor="let breadcrumb of breadcrumbs; let last = last">
+            <ng-container *ngIf="!last">
+              <nz-breadcrumb-item [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</nz-breadcrumb-item>
+            </ng-container>
+          </ng-container> -->
+          <!-- <nz-breadcrumb-item>Employees</nz-breadcrumb-item> -->
+          <!-- <nz-breadcrumb-item>Bill</nz-breadcrumb-item> -->
+        <!-- </nz-breadcrumb> -->
+        <router-outlet />
+      </nz-content>
+      <nz-footer>https://github.com/TrymoretimeH</nz-footer>
+    </nz-layout>
+  </nz-layout>
+  

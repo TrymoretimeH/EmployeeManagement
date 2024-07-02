@@ -1,0 +1,41 @@
+<button class="emp-btn-add" nz-button nzType="primary" nzSize="large" nzShape="circle">
+  <span nz-icon nzType="plus"></span>
+</button>
+<nz-table [nzData]="listOfEmployees" #EmployeeTable>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>DoB</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Position</th>
+        <th>Hire Date</th>
+        <th>Department ID</th>
+        <th>Salary ID</th>
+        <th nzRight>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of EmployeeTable.data">
+        <td>{{ data.id }}</td>
+        <td>{{ data.firstName }}</td>
+        <td>{{ data.lastName }}</td>
+        <td>{{ data.dateOfBirth | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.address }}</td>
+        <td>{{ data.phoneNumber }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.position }}</td>
+        <td>{{ data.hireDate | date: 'dd/MM/yyyy' }}</td>
+        <td>{{ data.departmentId }}</td>
+        <td>{{ data.salaryId }}</td>
+        <td>
+          <span style="margin-right: 4px;" nz-icon nzType="eye" nzTheme="twotone"></span>
+          <span style="margin-right: 8px;" nz-icon nzType="edit" nzTheme="twotone"></span>
+          <span nz-icon nzType="delete" [nzTwotoneColor]="'#eb2f96'" nzTheme="twotone"></span>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
