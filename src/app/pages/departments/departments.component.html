@@ -1,7 +1,9 @@
+<div nz-flex nzJustify="flex-end">
+  <button class="dep-btn-add" nz-button nzType="primary" nzSize="large">
+    Add new
+  </button>
+</div>
 <nz-table [nzData]="Department" #DepartmentTable>
-    <button class="dep-btn-add" nz-button nzType="primary" nzSize="large" nzShape="circle">
-      <span nz-icon nzType="plus"></span>
-    </button>
       <thead>
         <tr>
           <th>ID</th>
@@ -18,7 +20,8 @@
           <td>{{ data.description }}</td>
           <td>{{ data.managerId }}</td>
           <td>
-            <a>action</a>
+          <span class="cursor-pointer" style="margin-right: 8px;" nz-icon nzType="edit" nzTheme="twotone"></span>
+          <span class="cursor-pointer" nz-icon nzType="delete" [nzTwotoneColor]="'#e01d1d'" nzTheme="twotone"></span>
           </td>
         </tr>
       </tbody>

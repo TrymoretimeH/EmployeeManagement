@@ -1,6 +1,8 @@
-<button class="emp-btn-add" nz-button nzType="primary" nzSize="large" nzShape="circle">
-  <span nz-icon nzType="plus"></span>
-</button>
+<div nz-flex nzJustify="flex-end">
+  <button class="emp-btn-add" nz-button nzType="primary" nzSize="large">
+    Add new
+  </button>
+</div>
 <nz-table [nzData]="listOfEmployees" #EmployeeTable>
     <thead>
       <tr>
@@ -32,10 +34,99 @@
         <td>{{ data.departmentId }}</td>
         <td>{{ data.salaryId }}</td>
         <td>
-          <span style="margin-right: 4px;" nz-icon nzType="eye" nzTheme="twotone"></span>
-          <span style="margin-right: 8px;" nz-icon nzType="edit" nzTheme="twotone"></span>
-          <span nz-icon nzType="delete" [nzTwotoneColor]="'#eb2f96'" nzTheme="twotone"></span>
+          <a  (click)="showModal(data)" style="margin-right: 8px;">
+            <span nz-icon nzType="edit" nzTheme="twotone"></span>
+          </a>
+          <a>
+            <span nz-icon nzType="delete" [nzTwotoneColor]="'#e01d1d'" nzTheme="twotone"></span>
+          </a>
         </td>
       </tr>
     </tbody>
   </nz-table>
+
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Add a new employee" (nzOnCancel)="handleCancel()" (nzOnOk)="handleOk()">
+    <ng-container *nzModalContent>
+      <form nz-form [formGroup]="employeeForm" (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="firstName">First Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="firstName" id="firstName" placeholder="Enter first name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="lastName">Last Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="lastName" id="lastName" placeholder="Enter last name" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="dateOfBirth">Date Of Birth</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="dateOfBirth" id="dateOfBirth" placeholder="Enter date of birth" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="address">Address</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="address" id="address" placeholder="Enter address" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="phoneNumber">Phone Number</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="phoneNumber" id="phoneNumber" placeholder="Enter phone number" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Email</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="email" id="email" type="email" placeholder="Enter email" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="position">Position</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="position" id="position" placeholder="Enter position" />
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="departmentId">Department ID</nz-form-label>
+          <nz-form-control  [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <nz-input-group class="gr-select" [nzAddOnBefore]="addOnBeforeTemplate">
+              <ng-template #addOnBeforeTemplate>
+                <nz-select formControlName="departmentId" id="departmentId" nzPlaceHolder="Select Department">
+                  <nz-option *ngFor="let department of listOfDepartments" [nzLabel]="department.departmentName" [nzValue]="department.departmentId" onchange="handleChangeDep(department.departmentId)"></nz-option>
+                </nz-select>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <!-- <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="salaryId">Salary ID</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <input nz-input formControlName="salaryId" id="salaryId" placeholder="Enter salary ID" />
+          </nz-form-control>
+        </nz-form-item> -->
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="salaryId">Salary ID</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <nz-input-group class="gr-select" [nzAddOnBefore]="addOnBeforeSTemplate">
+              <ng-template #addOnBeforeSTemplate>
+                <nz-select formControlName="salaryId" id="salaryId" nzPlaceHolder="Select Salary">
+                  <nz-option *ngFor="let sal of listOfSalarys" [nzLabel]="sal.baseSalary" [nzValue]="sal.salaryId" onchange="handleChangeSal(sal.salaryId)"></nz-option>
+                </nz-select>
+              </ng-template>
+            </nz-input-group>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="hireDate">Hire Date</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is empty!">
+            <nz-date-picker formControlName="hireDate" id="hireDate" />
+          </nz-form-control>
+        </nz-form-item>
+        </form>
+    </ng-container>
+  </nz-modal>

@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.gr-select .ant-input-group-addon {
+    border: none;
+    padding: 0;
+}

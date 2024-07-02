@@ -4,6 +4,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { DepartmentsService } from '../../services/department/departments.service';
+import { NzFlexModule } from 'ng-zorro-antd/flex';
 
 interface Department {
   departmentId: number;
@@ -15,7 +16,7 @@ interface Department {
 @Component({
   selector: 'app-departments',
   standalone: true,
-  imports: [NzTableModule, CommonModule, NzButtonModule, NzIconModule],
+  imports: [NzTableModule, CommonModule, NzButtonModule, NzIconModule, NzFlexModule],
   templateUrl: './departments.component.html',
   styleUrl: './departments.component.css'
 })
