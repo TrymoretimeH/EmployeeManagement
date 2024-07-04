@@ -7,8 +7,18 @@ import { EmployeeService } from '../../services/employee/employee.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
-import { NzModalModule } from 'ng-zorro-antd/modal';
-import { FormControl, FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
+import {
+  AbstractControl,
+  EmailValidator,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { BrowserModule } from '@angular/platform-browser';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
@@ -38,7 +48,6 @@ interface Department {
 interface Salary {
   salaryId: number;
   baseSalary: number;
-
 }
 
 @Component({
@@ -56,7 +65,7 @@ interface Salary {
     ReactiveFormsModule,
     NzDatePickerModule,
     NzSelectModule,
-    NzInputModule
+    NzInputModule,
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
@@ -64,8 +73,9 @@ interface Salary {
 export class EmployeesComponent {
   listOfEmployees: Employee[] = [];
   empService: EmployeeService = new EmployeeService();
+  currentEmp: Employee | undefined = undefined;
 
-  isVisible = true;
+  isVisible = false;
   employeeForm: FormGroup<{
     firstName: FormControl<string>;
     lastName: FormControl<string>;
@@ -105,29 +115,55 @@ export class EmployeesComponent {
       salaryId: 3,
       baseSalary: 3000,
     },
-  ]
+  ];
 
-  constructor(private fb: NonNullableFormBuilder) {
+  autoTips: Record<string, Record<string, string>> = {
+    default: {
+      email: 'The input is not valid email!',
+      min: 'One option must be selected',
+    },
+  };
+
+  constructor(
+    private fb: NonNullableFormBuilder,
+    private modal: NzModalService
+  ) {
+    const { email, required, min } = Validators;
+
     this.employeeForm = this.fb.group({
-      firstName: ['', [Validators.required]],
-      lastName: ['', [Validators.required]],
-      dateOfBirth: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required]],
-      email: ['', [Validators.required]],
-      position: ['', [Validators.required]],
-      hireDate: ['', [Validators.required]],
-      departmentId: [0, [Validators.required]],
-      salaryId: [0, [Validators.required]],
-    })
+      firstName: ['', [required]],
+      lastName: ['', [required]],
+      dateOfBirth: ['', [required]],
+      address: ['', [required]],
+      phoneNumber: ['', [required]],
+      email: ['', [required, email]],
+      position: ['', [required]],
+      hireDate: ['', [required]],
+      departmentId: [0, [required, min(1)]],
+      salaryId: [0, [required, min(1)]],
+    });
   }
 
   submitForm(): void {
     if (this.employeeForm.valid) {
-      console.log('submit', this.employeeForm.value);
-      
+      if (this.currentEmp != undefined) {
+        this.empService
+          .update({ id: this.currentEmp.id, ...this.employeeForm.value })
+          .subscribe((res: any) => {
+            if (res.isSuccess) {
+              this.getAll();
+            }
+          });
+      } else {
+        this.empService.add(this.employeeForm.value).subscribe((res: any) => {
+          if (res.isSuccess) {
+            this.getAll();
+          }
+        });
+      }
+      this.isVisible = false;
     } else {
-      Object.values(this.employeeForm.controls).forEach(control => {
+      Object.values(this.employeeForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -136,34 +172,72 @@ export class EmployeesComponent {
     }
   }
 
-  updateConfirmValidator(): void {
-    /** wait for refresh value */
-    // Promise.resolve().then(() => this.employeeForm.controls.checkPassword.updateValueAndValidity());
-  }
-
-
   handleChangeDep(value: any) {
     this.employeeForm.controls.departmentId.setValue(toNumber(value));
   }
-
   handleChangeSal(value: any) {
     this.employeeForm.controls.salaryId.setValue(toNumber(value));
   }
 
-
-
-  showModal(data: Employee): void {
+  showModal(data: Employee | null = null): void {
+    if (data != null) {
+      this.currentEmp = data;
+      this.employeeForm.setValue({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: data.dateOfBirth,
+        address: data.address,
+        phoneNumber: data.phoneNumber,
+        email: data.email,
+        position: data.position,
+        hireDate: data.hireDate,
+        departmentId: data.departmentId,
+        salaryId: data.salaryId,
+      });
+    } else {
+      this.currentEmp = undefined;
+      this.employeeForm.reset();
+      Object.values(this.employeeForm.controls).forEach((control) => {
+        control.markAsPristine();
+        control.updateValueAndValidity({ onlySelf: true });
+      });
+    }
     this.isVisible = true;
   }
 
   handleOk(): void {
-    console.log('Button ok clicked!');
-    this.isVisible = false;
+    this.submitForm();
   }
 
   handleCancel(): void {
-    console.log('Button cancel clicked!');
     this.isVisible = false;
+  }
+
+  isEmail(email: string): boolean {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return emailRegex.test(email);
+  }
+
+  showDeleteConfirm(id: number): void {
+    this.modal.confirm({
+      nzTitle: 'Are you sure delete this employee?',
+      nzContent: '<b style="color: red;">This action can not be restore</b>',
+      nzOkText: 'Delete',
+      nzOkType: 'primary',
+      nzOkDanger: true,
+      nzOnOk: () =>
+        this.empService.delete(id).subscribe((res: any) => {
+          console.log(res);
+          if (res.isSuccess) {
+            this.getAll();
+          }
+        }),
+      nzCancelText: 'Cancel',
+      nzOnCancel: () => {
+        this.currentEmp = undefined;
+        console.log('Cancel');
+      },
+    });
   }
 
   http = inject(HttpClient);

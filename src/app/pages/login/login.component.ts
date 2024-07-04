@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -12,20 +13,27 @@ import { FormsModule } from '@angular/forms';
 export class LoginComponent {
   
   loginObj: any = {
-    "EmailId": "",
-    "Password": "",
+    "email": "",
+    "password": "",
   };
 
   http = inject(HttpClient);
 
+  constructor(private router: Router) {}
+
   onLogin() {
-    // this.http.post("https://freeapi.miniprojectideas.com/api/User/Login", this.loginObj).subscribe((res: any) => {
-    //   if (res.result) {
-    //     alert("Login success!")
-    //   } else {
-    //     alert("Check email or password")
-    //   }
-    // })
+    this.http.post("http://localhost:8094/auth/generateToken", this.loginObj, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    
+    }).subscribe((res: any) => {
+      console.log(res);
+      if (res.isSuccess) {
+        localStorage.setItem("token", res.data.token);
+        this.router.navigateByUrl("employees")
+      }
+    })
   }
 
 }

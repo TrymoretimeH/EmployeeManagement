@@ -5,13 +5,13 @@
               <label for="login__email"><svg class="icon">
                   <use xlink:href="#icon-user"></use>
                 </svg><span class="hidden">Email</span></label>
-              <input id="login__email" type="email" [(ngModel)]="loginObj.EmailId" name="EmailId" class="form__input" placeholder="Email" required>
+              <input id="login__email" type="email" [(ngModel)]="loginObj.email" name="email" class="form__input" placeholder="Email" required>
             </div>
             <div class="form__field">
               <label for="login__password"><svg class="icon">
                   <use xlink:href="#icon-lock"></use>
                 </svg><span class="hidden">Password</span></label>
-              <input id="login__password" type="password" [(ngModel)]="loginObj.Password" name="Password" class="form__input" placeholder="Password" required>
+              <input id="login__password" type="password" [(ngModel)]="loginObj.password" name="password" class="form__input" placeholder="Password" required>
             </div>
             <div class="form__field">
               <input type="submit" (click)="onLogin()" value="Sign In">

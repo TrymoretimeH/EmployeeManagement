@@ -33,7 +33,6 @@ export class BreadcrumbService {
   ): Array<{ label: string; url: string }> {
     const children: ActivatedRoute[] = route.children;
     if (children.length === 0) {
-      console.log(breadcrumbs);
 
       return breadcrumbs;
     }

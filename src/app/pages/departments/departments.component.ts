@@ -5,6 +5,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { DepartmentsService } from '../../services/department/departments.service';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
+import { FormControl, FormGroup } from '@angular/forms';
 
 interface Department {
   departmentId: number;
@@ -23,6 +24,30 @@ interface Department {
 export class DepartmentsComponent implements OnInit {
   Department: Department[] = [];
   depService: DepartmentsService = new DepartmentsService();
+  currentDep: Department | undefined = undefined;
+
+  isVisible = false;
+
+  depForm: FormGroup<{
+    departmentName: FormControl<string>;
+    description: FormControl<string>;
+    managerId: FormControl<number>;
+  }>;
+
+  listOfManagers: any[] = [
+    {
+      id: 1,
+      name: 'IT',
+    },
+    {
+      id: 2,
+      name: 'HR',
+    },
+    {
+      id: 3,
+      name: 'Finance',
+    },
+  ];
   
   ngOnInit(): void {
     this.getAll();

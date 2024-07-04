@@ -4,6 +4,7 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { DepartmentsComponent } from './pages/departments/departments.component';
+import { authGuard } from './guard/auth.guard';
 
 export const routes: Routes = [
     {
@@ -23,19 +24,20 @@ export const routes: Routes = [
             {
                 path: 'dashboard',
                 component: DashboardComponent,
-                data: { breadcrumb: 'Dashboard' }
+                data: { breadcrumb: 'Dashboard' },
+                canActivate: [authGuard]
             },
             {
                 path: 'employees',
                 component: EmployeesComponent,
-                data: { breadcrumb: 'Employee' }
-
+                data: { breadcrumb: 'Employee' },
+                canActivate: [authGuard]
             },
             {
                 path: 'departments',
                 component: DepartmentsComponent,
-                data: { breadcrumb: 'Department' }
-
+                data: { breadcrumb: 'Department' },
+                canActivate: [authGuard]
             }
         ]
     }
