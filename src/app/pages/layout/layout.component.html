@@ -1,27 +1,39 @@
 <nz-layout class="layout-wrapper">
-    <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
-      <div [className]="isCollapsed ? 'logo logo-fold' : 'logo'" routerLink="dashboard">
-        <span nz-icon nzType="poweroff" nzTheme="outline"></span>
-      </div>
-      <ul nz-menu nzTheme="dark" nzMode="inline">
-        <li nz-menu-item routerLink="/employees">
-          <span nz-icon nzType="team"></span>
-          <span>Employees</span>
-        </li>
-        <!-- <li nz-submenu nzTitle="Team" nzIcon="team">
+  <nz-sider nzCollapsible [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
+    <div
+      [className]="isCollapsed ? 'logo logo-fold' : 'logo'"
+      routerLink="dashboard"
+    >
+      <span nz-icon nzType="poweroff" nzTheme="outline"></span>
+    </div>
+    <ul nz-menu nzTheme="dark" nzMode="inline">
+      <li nz-menu-item routerLink="/employees" [nzSelected]="currentUrl === '/employees'">
+        <span nz-icon nzType="team"></span>
+        <span>Employees</span>
+      </li>
+      <!-- <li nz-submenu nzTitle="Team" nzIcon="team">
           <ul>
             <li nz-menu-item>Team 1</li>
             <li nz-menu-item>Team 2</li>
           </ul>
         </li> -->
-        <li nz-menu-item routerLink="/departments">
-          <span nz-icon nzType="apartment"></span>
-          <span>Departments</span>
-        </li>
-      </ul>
-    </nz-sider>
-    <nz-layout>
-      <nz-header>
+      <li nz-menu-item routerLink="/departments" [nzSelected]="currentUrl === '/departments'">
+        <span nz-icon nzType="apartment"></span>
+        <span>Departments</span>
+      </li>
+      <li nz-menu-item routerLink="/salarys" [nzSelected]="currentUrl === '/salarys'">
+        <span nz-icon nzType="money-collect"></span>
+        <span>Salarys</span>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item routerLink="/attendances" [nzSelected]="currentUrl === '/attendances'">
+        <span nz-icon nzType="clock-circle"></span>
+        <span>Attendances</span>
+    </ul>
+  </nz-sider>
+  <nz-layout>
+    <nz-header class="layout-header">
+      <div>
         <span
           class="trigger"
           nz-icon
@@ -29,21 +41,56 @@
           (click)="isCollapsed = !isCollapsed"
         ></span>
         Employee Management
-      </nz-header>
-      <nz-content class="layout-content">
-        <app-breadcrumb></app-breadcrumb>
-        <!-- <nz-breadcrumb>
+      </div>
+      <div>
+        <nz-avatar
+          nz-dropdown
+          nzTrigger="click"
+          [nzDropdownMenu]="menu"
+          class="avatar"
+          [nzText]="isAdmin ? 'ADMIN' : isUser ? 'USER' : 'NONE'"
+          style="background-color: #87d068; margin: 0 24px"
+        ></nz-avatar>
+        <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu>
+            @if (this.email) {
+              <li nz-menu-item>{{ this.email }}</li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="logout()">Logout</li>
+            }
+            @else {
+              <li nz-menu-item (click)="login()">Login</li>
+            }
+            <!-- <li nz-submenu nzTitle="sub menu">
+              <ul>
+                <li nz-menu-item>3rd menu item</li>
+                <li nz-menu-item>4th menu item</li>
+              </ul>
+            </li> -->
+            <!-- <li nz-submenu nzDisabled nzTitle="disabled sub menu">
+              <ul>
+                <li nz-menu-item>3rd menu item</li>
+                <li nz-menu-item>4th menu item</li>
+              </ul>
+            </li> -->
+
+          </ul>
+        </nz-dropdown-menu>
+      </div>
+    </nz-header>
+    <nz-content class="layout-content">
+      <app-breadcrumb></app-breadcrumb>
+      <!-- <nz-breadcrumb>
           <ng-container *ngFor="let breadcrumb of breadcrumbs; let last = last">
             <ng-container *ngIf="!last">
               <nz-breadcrumb-item [routerLink]="breadcrumb.url">{{ breadcrumb.label }}</nz-breadcrumb-item>
             </ng-container>
           </ng-container> -->
-          <!-- <nz-breadcrumb-item>Employees</nz-breadcrumb-item> -->
-          <!-- <nz-breadcrumb-item>Bill</nz-breadcrumb-item> -->
-        <!-- </nz-breadcrumb> -->
-        <router-outlet />
-      </nz-content>
-      <nz-footer>https://github.com/TrymoretimeH</nz-footer>
-    </nz-layout>
+      <!-- <nz-breadcrumb-item>Employees</nz-breadcrumb-item> -->
+      <!-- <nz-breadcrumb-item>Bill</nz-breadcrumb-item> -->
+      <!-- </nz-breadcrumb> -->
+      <router-outlet />
+    </nz-content>
+    <nz-footer>https://github.com/TrymoretimeH</nz-footer>
   </nz-layout>
-  
+</nz-layout>

@@ -1,9 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .gr-select .ant-input-group-addon {
-    border: none;
-    padding: 0;
+  border: none;
+  padding: 0;
+}
+
+.scroll-x {
+  overflow-x: auto;
+}
+
+/* ::-webkit-scrollbar {
+    height: 10px;
+} */
+
+::-webkit-scrollbar
+{
+	height: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+    border-radius: 100px;
+    background-color: #001529;
+    /* background-color: red; */
+}
+
+
+
+::-webkit-scrollbar-thumb
+{
+	background-color: #f0f2f5;
+	border: 1px solid #000000d9;
+    border-radius: 100px;
+    
 }

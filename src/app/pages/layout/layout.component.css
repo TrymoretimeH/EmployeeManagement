@@ -61,3 +61,14 @@ nz-footer {
 .breadcrumb {
   margin-bottom: 8px;
 }
+
+.layout-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.avatar {
+  cursor: pointer;
+}
+

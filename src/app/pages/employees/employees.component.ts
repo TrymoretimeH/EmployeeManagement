@@ -1,22 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { Observable } from 'rxjs';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import {
-  AbstractControl,
-  EmailValidator,
   FormControl,
   FormGroup,
   FormsModule,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -25,8 +20,9 @@ import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { toNumber } from 'ng-zorro-antd/core/util';
+import { DepartmentsService } from '../../services/department/departments.service';
 
-interface Employee {
+export interface Employee {
   id: number;
   firstName: string;
   lastName: string;
@@ -74,6 +70,7 @@ export class EmployeesComponent {
   listOfEmployees: Employee[] = [];
   empService: EmployeeService = new EmployeeService();
   currentEmp: Employee | undefined = undefined;
+  depService: DepartmentsService = new DepartmentsService()
 
   isVisible = false;
   employeeForm: FormGroup<{
@@ -121,6 +118,7 @@ export class EmployeesComponent {
     default: {
       email: 'The input is not valid email!',
       min: 'One option must be selected',
+      required: 'The input must be filled',
     },
   };
 
@@ -240,13 +238,16 @@ export class EmployeesComponent {
     });
   }
 
-  http = inject(HttpClient);
-
   ngOnInit(): void {
     this.getAll();
+    this.getDeps();
   }
 
   getAll(): void {
     this.empService.getAll().subscribe((emps) => (this.listOfEmployees = emps));
+  }
+
+  getDeps(): void {
+    this.depService.getAll().subscribe((deps) => (this.listOfDepartments = deps))
   }
 }

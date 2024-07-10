@@ -1,0 +1,184 @@
+<div nz-flex nzJustify="flex-end">
+  <button
+    (click)="showModal()"
+    class="atd-btn-add"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Add new
+  </button>
+</div>
+<nz-table class="scroll-x atd-content-wrapper" [nzData]="data" #AttendanceTable>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Employee Id</th>
+      <th>Check In Time</th>
+      <th>Check Out Time</th>
+      <th>Attendance Date</th>
+      <th>Image</th>
+      <th nzRight>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of AttendanceTable.data">
+      <td>{{ data.attendanceId }}</td>
+      <td>{{ data.employeeId }}</td>
+      <td>{{ data.checkInTime | date : "HH:mm:ss" }}</td>
+      <td>{{ data.checkOutTime | date : "HH:mm:ss" }}</td>
+      <td>{{ data.attendanceDate | date : "dd/MM/yyyy" }}</td>
+      <td>
+        <img
+          class="atd-img"
+          width="64"
+          height="48"
+          [src]="data.image"
+          alt="Attendance Image"
+        />
+      </td>
+      <td>
+        <a (click)="showModal(data)" style="margin-right: 8px">
+          <span nz-icon nzType="edit" nzTheme="twotone"></span>
+        </a>
+        <a (click)="showDeleteConfirm(data.attendanceId)">
+          <span
+            nz-icon
+            nzType="delete"
+            [nzTwotoneColor]="'#e01d1d'"
+            nzTheme="twotone"
+          ></span>
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [nzVisible]="isVisible"
+  [nzTitle]="
+    this.currentAttendance ? 'Update an attendance' : 'Add a new attendance'
+  "
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+  nzWidth="688px"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-flex
+      nzVertical="vertical"
+      nz-form
+      [formGroup]="attendanceForm"
+      [nzAutoTips]="autoTips"
+      (ngSubmit)="submitForm()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="employeeId"
+          >Employee ID</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-input-group
+            class="gr-select"
+            [nzAddOnBefore]="addOnBeforeTemplate"
+          >
+            <ng-template #addOnBeforeTemplate>
+              <nz-select
+                formControlName="employeeId"
+                nzAllowClear
+                id="employeeId"
+                nzPlaceHolder="Select Employee"
+              >
+                <nz-option
+                  *ngFor="let emp of empData"
+                  [nzLabel]="emp.employeeName"
+                  [nzValue]="emp.employeeId"
+                  onchange="handleChangeEmp(emp.employeeId)"
+                ></nz-option>
+              </nz-select>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="attendanceDate"
+          >Attendance Date</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-date-picker
+            formControlName="attendanceDate"
+            id="attendanceDate"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkInTime"
+          >Check In Time</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-time-picker formControlName="checkInTime" id="checkInTime" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="checkOutTime"
+          >Check Out Time</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-time-picker formControlName="checkOutTime" id="checkOutTime" />
+        </nz-form-control>
+      </nz-form-item>
+      @if (this.webcamImage || this.currentImage) {
+        <nz-form-item nz-flex nzJustify="center">
+          <nz-form-control [nzSm]="20" [nzXs]="20">
+            <img
+              style="width: 100%; object-fit: contain; height: auto;"
+              id="displayedImage"
+              [src]="this.webcamImage?.imageAsDataUrl || this.currentImage"
+              alt="Captured Image"
+            />
+          </nz-form-control>
+        </nz-form-item>
+      } 
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Image</nz-form-label>
+        <!-- <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input (change)="handleChangeFile($event)" type="file" formControlName="image" id="image" />
+        </nz-form-control> -->
+        @if (!this.isWebcamOpen) {
+          <nz-form-control [nzSm]="14" [nzXs]="24">
+            <button
+              (click)="showWebcam()"
+              nz-button
+              type="button"
+              nzType="primary"
+              nzSize="large"
+              nzShape="round"
+            >
+              Capture Image
+            </button>
+          </nz-form-control>
+          }
+          
+      </nz-form-item>
+      @if (this.isWebcamOpen) {
+      <webcam
+        (imageQuality)="(1)"
+        (initError)="handleInitError($event)"
+        [trigger]="triggerObservable()"
+        (imageCapture)="handleImageOutput($event)"
+      ></webcam>
+      <div nz-flex nzJustify="center">
+        <button
+          (click)="handleCapture()"
+          type="button"
+          nz-button
+          nzType="primary"
+          nzSize="large"
+          nzShape="round"
+        >
+          <span nz-icon nzType="camera"></span>
+        </button>
+      </div>
+      }
+    </form>
+  </ng-container>
+</nz-modal>

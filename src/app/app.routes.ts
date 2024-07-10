@@ -4,7 +4,10 @@ import { LayoutComponent } from './pages/layout/layout.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { EmployeesComponent } from './pages/employees/employees.component';
 import { DepartmentsComponent } from './pages/departments/departments.component';
-import { authGuard } from './guard/auth.guard';
+import { authGuard } from './guard/auth/auth.guard';
+import { SalarysComponent } from './pages/salarys/salarys.component';
+import { AttendanceComponent } from './pages/attendance/attendance.component';
+import { adminGuard } from './guard/admin/admin.guard';
 
 export const routes: Routes = [
     {
@@ -25,18 +28,29 @@ export const routes: Routes = [
                 path: 'dashboard',
                 component: DashboardComponent,
                 data: { breadcrumb: 'Dashboard' },
-                canActivate: [authGuard]
             },
             {
                 path: 'employees',
                 component: EmployeesComponent,
                 data: { breadcrumb: 'Employee' },
-                canActivate: [authGuard]
+                canActivate: [authGuard, adminGuard]
             },
             {
                 path: 'departments',
                 component: DepartmentsComponent,
                 data: { breadcrumb: 'Department' },
+                canActivate: [authGuard, adminGuard]
+            },
+            {
+                path: 'salarys',
+                component: SalarysComponent,
+                data: { breadcrumb: 'Salary' },
+                canActivate: [authGuard, adminGuard]
+            },
+            {
+                path: 'attendances',
+                component: AttendanceComponent,
+                data: { breadcrumb: 'Attendance' },
                 canActivate: [authGuard]
             }
         ]

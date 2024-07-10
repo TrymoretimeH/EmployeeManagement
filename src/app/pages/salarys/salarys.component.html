@@ -1,0 +1,94 @@
+<div nz-flex nzJustify="flex-end">
+  <button (click)="showModal()" class="sal-btn-add" nz-button nzType="primary" nzSize="large">
+    Add new
+  </button>
+</div>
+
+<div class="salary-content-wrapper" nz-flex nzGap="middle">
+  <nz-card *ngFor="let sal of Salary; let i = index" style="width: calc(100%/3);" [nzTitle]="sal.salaryId.toString()" [nzExtra]="extraTemplateRef">
+    <p>Base Salary: {{ sal.baseSalary }}</p>
+    <p>Allowance: {{ sal.allowance }}</p>
+    <p>Deductions: {{ sal.deductions }}</p>
+    <ng-template #extraTemplateRef>
+      <ng-container *ngTemplateOutlet="extraTemplate; context: {$implicit: sal}"></ng-container>
+    </ng-template>
+  </nz-card>
+</div>
+
+<ng-template #extraTemplate let-data="$implicit">
+  <span
+          (click)="showModal(data)"
+          class="cursor-pointer"
+          style="margin-right: 8px"
+          nz-icon
+          nzType="edit"
+          nzTheme="twotone"
+        ></span>
+        <span
+          (click)="showDeleteConfirm(data.salaryId)"
+          class="cursor-pointer"
+          nz-icon
+          nzType="delete"
+          [nzTwotoneColor]="'#e01d1d'"
+          nzTheme="twotone"
+        ></span>
+</ng-template>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="this.currentSal ? 'Update a salary' : 'Add a new salary'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="salForm"
+      [nzAutoTips]="autoTips"
+      (ngSubmit)="submitForm()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="baseSalary"
+          >Base Salary</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            type="number"
+            formControlName="baseSalary"
+            id="baseSalary"
+            placeholder="Enter Base Salary"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="allowance"
+          >Allowance</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            type="number"
+            formControlName="allowance"
+            id="allowance"
+            placeholder="Enter Allowance"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="deductions"
+          >Deductions</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            type="number"
+            formControlName="deductions"
+            id="deductions"
+            placeholder="Enter Deductions"
+          />
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

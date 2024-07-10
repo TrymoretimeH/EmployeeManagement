@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzTableModule } from 'ng-zorro-antd/table';
-import { DepartmentsService } from '../../services/department/departments.service';
 import { NzFlexModule } from 'ng-zorro-antd/flex';
 import {
   FormControl,
@@ -20,16 +19,18 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { EmployeeService } from '../../services/employee/employee.service';
+import { SalarysService } from '../../services/salary/salarys.service';
+import { NzCardModule } from 'ng-zorro-antd/card';
 
-interface Department {
-  departmentId: number;
-  departmentName: string;
-  description: string;
-  managerId: number;
+interface Salary {
+  salaryId: number;
+  baseSalary: number;
+  allowance: number;
+  deductions: number;
 }
 
 @Component({
-  selector: 'app-departments',
+  selector: 'app-salarys',
   standalone: true,
   imports: [
     NzTableModule,
@@ -43,39 +44,24 @@ interface Department {
     NzSelectModule,
     NzInputModule,
     NzFormModule,
-    FormsModule
+    FormsModule,
+    NzCardModule
   ],
-  templateUrl: './departments.component.html',
-  styleUrl: './departments.component.css',
+  templateUrl: './salarys.component.html',
+  styleUrl: './salarys.component.css',
 })
-export class DepartmentsComponent implements OnInit {
-  Department: Department[] = [];
-  currentDep: Department | undefined = undefined;
-  depService: DepartmentsService = new DepartmentsService();
-  empService: EmployeeService = new EmployeeService();
+export class SalarysComponent implements OnInit {
+  Salary: Salary[] = [];
+  currentSal: Salary | undefined = undefined;
+  salService: SalarysService = new SalarysService();
 
   isVisible = false;
 
-  depForm: FormGroup<{
-    departmentName: FormControl<string>;
-    description: FormControl<string>;
-    managerId: FormControl<number>;
+  salForm: FormGroup<{
+    baseSalary: FormControl<number>;
+    allowance: FormControl<number>;
+    deductions: FormControl<number>;
   }>;
-
-  listOfManagers: any[] = [
-    {
-      id: 1,
-      name: 'IT',
-    },
-    {
-      id: 2,
-      name: 'HR',
-    },
-    {
-      id: 3,
-      name: 'Finance',
-    },
-  ];
 
   autoTips: Record<string, Record<string, string>> = {
     default: {
@@ -87,26 +73,26 @@ export class DepartmentsComponent implements OnInit {
     private fb: NonNullableFormBuilder,
     private modal: NzModalService
   ) {
-    const { required, min } = Validators;
-    this.depForm = this.fb.group({
-      departmentName: ['', [required]],
-      description: ['', [required]],
-      managerId: [0, [required, min(1)]],
+    const { required } = Validators;
+    this.salForm = this.fb.group({
+      baseSalary: [0, [required]],
+      allowance: [0, [required]],
+      deductions: [0, [required]],
     });
   }
 
   submitForm(): void {
-    if (this.depForm.valid) {
-      if (this.currentDep != undefined) {
-        this.depService
-          .update({ departmentId: this.currentDep.departmentId, ...this.depForm.value })
+    if (this.salForm.valid) {
+      if (this.currentSal != undefined) {
+        this.salService
+          .update({ salaryId: this.currentSal.salaryId, ...this.salForm.value })
           .subscribe((res: any) => {
             if (res.isSuccess) {
               this.getAll();
             }
           });
       } else {
-        this.depService.add(this.depForm.value).subscribe((res: any) => {
+        this.salService.add(this.salForm.value).subscribe((res: any) => {
           if (res.isSuccess) {
             this.getAll();
           }
@@ -114,7 +100,7 @@ export class DepartmentsComponent implements OnInit {
       }
       this.isVisible = false;
     } else {
-      Object.values(this.depForm.controls).forEach((control) => {
+      Object.values(this.salForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -122,23 +108,18 @@ export class DepartmentsComponent implements OnInit {
       });
     }
   }
-
-  handleChangeManager(value: any) {
-    this.depForm.controls.managerId.setValue(toNumber(value));
-  }
-
-  showModal(data: Department | null = null): void {
+  showModal(data: Salary | null = null): void {
     if (data != null) {
-      this.currentDep = data;
-      this.depForm.setValue({
-        departmentName: data.departmentName,
-        description: data.description,
-        managerId: data.managerId,
+      this.currentSal = data;
+      this.salForm.setValue({
+        baseSalary: data.baseSalary,
+        allowance: data.allowance,
+        deductions: data.deductions,
       });
     } else {
-      this.currentDep = undefined;
-      this.depForm.reset();
-      Object.values(this.depForm.controls).forEach((control) => {
+      this.currentSal = undefined;
+      this.salForm.reset();
+      Object.values(this.salForm.controls).forEach((control) => {
         control.markAsPristine();
         control.updateValueAndValidity({ onlySelf: true });
       });
@@ -156,13 +137,13 @@ export class DepartmentsComponent implements OnInit {
 
   showDeleteConfirm(id: number): void {
     this.modal.confirm({
-      nzTitle: 'Are you sure delete this department?',
+      nzTitle: 'Are you sure delete this salary?',
       nzContent: '<b style="color: red;">This action can not be restore</b>',
       nzOkText: 'Delete',
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () =>
-        this.depService.delete(id).subscribe((res: any) => {
+        this.salService.delete(id).subscribe((res: any) => {
           console.log(res);
           if (res.isSuccess) {
             this.getAll();
@@ -170,7 +151,7 @@ export class DepartmentsComponent implements OnInit {
         }),
       nzCancelText: 'Cancel',
       nzOnCancel: () => {
-        this.currentDep = undefined;
+        this.currentSal = undefined;
         console.log('Cancel');
       },
     });
@@ -178,19 +159,9 @@ export class DepartmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAll();
-    this.getManagers();
   }
 
   getAll(): void {
-    this.depService.getAll().subscribe((deps) => (this.Department = deps));
-  }
-
-  getManagers(): void {
-    this.empService.getAll().subscribe((emps) => {
-      this.listOfManagers = emps.map((emp) => ({
-        ...emp,
-        name: emp.firstName + ' ' + emp.lastName,
-      }));
-    });
+    this.salService.getAll().subscribe((sals) => (this.Salary = sals));
   }
 }

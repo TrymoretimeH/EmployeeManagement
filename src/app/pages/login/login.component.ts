@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { tokenUtil } from '../../utils/token/token';
 
 @Component({
   selector: 'app-login',
@@ -28,9 +29,10 @@ export class LoginComponent {
       }
     
     }).subscribe((res: any) => {
-      console.log(res);
       if (res.isSuccess) {
-        localStorage.setItem("token", res.data.token);
+        
+        tokenUtil.setToken(res.data.token);
+        // localStorage.setItem("token", res.data.token);
         this.router.navigateByUrl("employees")
       }
     })

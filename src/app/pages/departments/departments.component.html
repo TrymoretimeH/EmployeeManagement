@@ -1,28 +1,113 @@
 <div nz-flex nzJustify="flex-end">
-  <button class="dep-btn-add" nz-button nzType="primary" nzSize="large">
+  <button (click)="showModal()" class="dep-btn-add" nz-button nzType="primary" nzSize="large">
     Add new
   </button>
 </div>
-<nz-table [nzData]="Department" #DepartmentTable>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Manager ID</th>
-          <th nzRight>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let data of DepartmentTable.data">
-          <td>{{ data.departmentId }}</td>
-          <td>{{ data.departmentName }}</td>
-          <td>{{ data.description }}</td>
-          <td>{{ data.managerId }}</td>
-          <td>
-          <span class="cursor-pointer" style="margin-right: 8px;" nz-icon nzType="edit" nzTheme="twotone"></span>
-          <span class="cursor-pointer" nz-icon nzType="delete" [nzTwotoneColor]="'#e01d1d'" nzTheme="twotone"></span>
-          </td>
-        </tr>
-      </tbody>
-    </nz-table>
+<nz-table class="scroll-x dep-content-wrapper" [nzData]="Department" #DepartmentTable>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Manager ID</th>
+      <th nzRight>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of DepartmentTable.data">
+      <td>{{ data.departmentId }}</td>
+      <td>{{ data.departmentName }}</td>
+      <td>{{ data.description }}</td>
+      <td>{{ data.managerId }}</td>
+      <td>
+        <span
+          (click)="showModal(data)"
+          class="cursor-pointer"
+          style="margin-right: 8px"
+          nz-icon
+          nzType="edit"
+          nzTheme="twotone"
+        ></span>
+        <span
+          (click)="showDeleteConfirm(data.departmentId)"
+          class="cursor-pointer"
+          nz-icon
+          nzType="delete"
+          [nzTwotoneColor]="'#e01d1d'"
+          nzTheme="twotone"
+        ></span>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="this.currentDep ? 'Update a department' : 'Add a new department'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="depForm"
+      [nzAutoTips]="autoTips"
+      (ngSubmit)="submitForm()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="departmentName"
+          >Name</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            formControlName="departmentName"
+            id="departmentName"
+            placeholder="Enter Department Name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="description"
+          >Description</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            formControlName="description"
+            id="description"
+            placeholder="Enter Description"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="managerId"
+          >Manager ID</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-input-group
+            class="gr-select"
+            [nzAddOnBefore]="addOnBeforeTemplate"
+          >
+            <ng-template #addOnBeforeTemplate>
+              <nz-select
+                formControlName="managerId"
+                nzAllowClear
+                id="managerId"
+                nzPlaceHolder="Select Manager"
+              >
+                <nz-option
+                  *ngFor="let manager of listOfManagers"
+                  [nzLabel]="manager.name"
+                  [nzValue]="manager.id"
+                  onchange="handleChangeManager(manager.id)"
+                ></nz-option>
+              </nz-select>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    
+    </form>
+  </ng-container>
+</nz-modal>

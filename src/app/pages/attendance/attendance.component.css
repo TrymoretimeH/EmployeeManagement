@@ -1,7 +1,3 @@
-.emp-btn-add {
-    
-}
-
 .gr-select {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -9,6 +5,10 @@
     border-radius: 2px;
 }
 
-.emp-content-wrapper {
+.atd-content-wrapper {
     margin-top: 16px;
+}
+
+.atd-img {
+    object-fit: contain;
 }
