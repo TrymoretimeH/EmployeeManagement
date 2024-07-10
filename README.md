@@ -1,10 +1,45 @@
 # EmployeeManagement
-
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.6.
+## Description
 DB: Oracle
 BE: Spring Boot
 FE: Angular
+* Authorize/Authenticate with jwt, spring security
+* Enable cors
+* Saving image with compress/decompress byte[]
+* DEMO:
+<p align="middle">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/0cb1ffa5-3acb-4656-94e5-243b39d9f08c" width="100">
+</p>
+  <p align="middle">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/18f436b7-7648-4ca7-b9af-2b19f1fe3f31" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/b38ed707-e6f8-4d8b-b04e-30341b6b59a0" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/f2861187-0be9-4c5b-9794-4c8a560229ea" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/ea989725-086d-4ce2-bdeb-351b4a3fe774" width="100">
+  </p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.6.
+  <p align="middle">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/c0eb99fa-c398-4805-83ba-15a481f035c8" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/ab63d97c-f00c-4bc2-b1c2-c77530910c42" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/ae294344-ff33-4f1d-a2bf-8c5aa364d014" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/5d5240bd-dd52-4c62-b054-d220ad2d20a1" width="100">
+  </p>
+
+  <p align="middle">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/4c6578ec-a664-47a4-8b63-0c797b915e12" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/44abb573-3b9f-47ae-a4f8-720ec5a2c125" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/5d91af2b-a4d2-4d58-bf5d-9d2f3f0cfe75" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/27080a4e-c147-4e50-8402-74edb0389540" width="100">
+  </p>
+
+  <p align="middle">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/6eedb235-9a67-4a1f-ba89-42a0cc99a6a5" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/ca04c3af-0b3a-4f50-add3-7a501b0b92bb" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/e15417b2-fca0-4cee-9c8f-e715d87cf2e2" width="100">
+    <img src="https://github.com/TrymoretimeH/EmployeeManagement/assets/96780850/c76ec6e8-f4f0-4f57-b091-646c1b0fb7e9" width="100">
+  </p>
+  
+
 
 ## Development server
 
