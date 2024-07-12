@@ -25,6 +25,8 @@ import { NzTimePickerModule } from 'ng-zorro-antd/time-picker';
 import { NzImageModule } from 'ng-zorro-antd/image';
 import { WebcamImage, WebcamInitError, WebcamModule, WebcamUtil } from 'ngx-webcam';
 import { Observable, Subject } from 'rxjs';
+import { Employee } from '../employees/employees.component';
+import { tokenUtil } from '../../utils/token/token';
 
 @Component({
   selector: 'app-attendance',
@@ -50,6 +52,7 @@ import { Observable, Subject } from 'rxjs';
   styleUrl: './attendance.component.css'
 })
 export class AttendanceComponent {
+  employeeDetails: Employee | null = null;
   data: Attendance[] = [];
   empData: any[] = [];
   currentAttendance: Attendance | undefined = undefined;
@@ -91,7 +94,7 @@ export class AttendanceComponent {
   showModal(data: Attendance | null = null): void {
     if (data != null) {
       this.currentAttendance = data;
-      this.attendanceForm.controls.employeeId.setValue(data.employeeId);
+      this.attendanceForm.controls.employeeId.setValue(data.employee.id);
       this.attendanceForm.controls.checkInTime.setValue(data.checkInTime);
       this.attendanceForm.controls.checkOutTime.setValue(data.checkOutTime);
       this.attendanceForm.controls.attendanceDate.setValue(data.attendanceDate);
@@ -102,6 +105,13 @@ export class AttendanceComponent {
     } else {
       this.currentAttendance = undefined;
       this.currentImage = null;
+      if (this.employeeDetails != null) {
+        if (this.employeeDetails?.id > 0) {
+          this.attendanceForm.patchValue({
+            employeeId: this.employeeDetails.id,
+          });
+        }  
+      }
       
     }
     this.isVisible = true;
@@ -292,6 +302,16 @@ export class AttendanceComponent {
         });
       })
     });
+
+    this.employeeDetails = tokenUtil.getEmployeeDetails(tokenUtil.getToken());
+
+    if (tokenUtil.getRoles(tokenUtil.getToken()) === "USER") {
+      this.empData = [{
+        employeeName: this.employeeDetails?.firstName + " " + this.employeeDetails?.lastName,
+        employeeId: this.employeeDetails?.id,
+      }]
+    }
+
   }
 
   getAll(): void {
@@ -328,7 +348,7 @@ export class AttendanceComponent {
 
 export interface Attendance {
   attendanceId: number;
-  employeeId: number;
+  employee: Employee;
   checkInTime: Date;
   checkOutTime: Date;
   attendanceDate: Date;

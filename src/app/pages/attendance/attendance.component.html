@@ -13,7 +13,7 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>Employee Id</th>
+      <th>Employee</th>
       <th>Check In Time</th>
       <th>Check Out Time</th>
       <th>Attendance Date</th>
@@ -24,7 +24,7 @@
   <tbody>
     <tr *ngFor="let data of AttendanceTable.data">
       <td>{{ data.attendanceId }}</td>
-      <td>{{ data.employeeId }}</td>
+      <td>{{ data.employee.firstName + " " + data.employee.lastName }}</td>
       <td>{{ data.checkInTime | date : "HH:mm:ss" }}</td>
       <td>{{ data.checkOutTime | date : "HH:mm:ss" }}</td>
       <td>{{ data.attendanceDate | date : "dd/MM/yyyy" }}</td>

@@ -20,10 +20,12 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { EmployeeService } from '../../services/employee/employee.service';
+import { Employee } from '../employees/employees.component';
 
-interface Department {
+export interface Department {
   departmentId: number;
   departmentName: string;
+  employeeList: Employee[];
   description: string;
   managerId: number;
 }
@@ -59,23 +61,10 @@ export class DepartmentsComponent implements OnInit {
   depForm: FormGroup<{
     departmentName: FormControl<string>;
     description: FormControl<string>;
-    managerId: FormControl<number>;
+    managerId: FormControl<any>;
   }>;
 
-  listOfManagers: any[] = [
-    {
-      id: 1,
-      name: 'IT',
-    },
-    {
-      id: 2,
-      name: 'HR',
-    },
-    {
-      id: 3,
-      name: 'Finance',
-    },
-  ];
+  listOfManagers: Employee[] = [];
 
   autoTips: Record<string, Record<string, string>> = {
     default: {
@@ -93,6 +82,14 @@ export class DepartmentsComponent implements OnInit {
       description: ['', [required]],
       managerId: [0, [required, min(1)]],
     });
+  }
+
+  getNameForManager(managerId: number): string {
+    const manager = this.listOfManagers.find((emp) => emp.id === managerId);
+    if (manager?.id) {
+      return manager.firstName + " " + manager.lastName;
+    }
+    return "";
   }
 
   submitForm(): void {
@@ -130,6 +127,7 @@ export class DepartmentsComponent implements OnInit {
   showModal(data: Department | null = null): void {
     if (data != null) {
       this.currentDep = data;
+      // this.listOfManagers = this.currentDep.employeeList
       this.depForm.setValue({
         departmentName: data.departmentName,
         description: data.description,
@@ -187,10 +185,7 @@ export class DepartmentsComponent implements OnInit {
 
   getManagers(): void {
     this.empService.getAll().subscribe((emps) => {
-      this.listOfManagers = emps.map((emp) => ({
-        ...emp,
-        name: emp.firstName + ' ' + emp.lastName,
-      }));
+      this.listOfManagers = emps;
     });
   }
 }

@@ -18,7 +18,7 @@
       <td>{{ data.departmentId }}</td>
       <td>{{ data.departmentName }}</td>
       <td>{{ data.description }}</td>
-      <td>{{ data.managerId }}</td>
+      <td>{{ getNameForManager(data.managerId) }}</td>
       <td>
         <span
           (click)="showModal(data)"
@@ -98,7 +98,7 @@
               >
                 <nz-option
                   *ngFor="let manager of listOfManagers"
-                  [nzLabel]="manager.name"
+                  [nzLabel]="manager.firstName + ' ' + manager.lastName"
                   [nzValue]="manager.id"
                   onchange="handleChangeManager(manager.id)"
                 ></nz-option>

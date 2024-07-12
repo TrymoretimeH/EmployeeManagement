@@ -21,7 +21,7 @@
       <th>Email</th>
       <th>Position</th>
       <th>Hire Date</th>
-      <th>Department ID</th>
+      <th>Department</th>
       <th>Salary ID</th>
       <th nzRight>Action</th>
     </tr>
@@ -37,7 +37,7 @@
       <td>{{ data.email }}</td>
       <td>{{ data.position }}</td>
       <td>{{ data.hireDate | date : "dd/MM/yyyy" }}</td>
-      <td>{{ data.departmentId }}</td>
+      <td>{{ data.department.departmentName }}</td>
       <td>{{ data.salaryId }}</td>
       <td>
         <a (click)="showModal(data)" style="margin-right: 8px">

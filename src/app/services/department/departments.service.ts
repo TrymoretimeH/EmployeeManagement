@@ -1,13 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Department } from '../../pages/departments/departments.component';
 
-interface Department {
-  departmentId: number;
-  departmentName: string;
-  description: string;
-  managerId: number;
-}
 
 @Injectable({
   providedIn: 'root'

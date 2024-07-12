@@ -1,3 +1,4 @@
+import { Employee } from "../../pages/employees/employees.component";
 
 
 export class tokenUtil {
@@ -32,6 +33,15 @@ export class tokenUtil {
             const payload = JSON.parse(atob(token.split(".")[1]));
     
             return payload.sub;
+        }
+        return null;
+    }
+
+    public static getEmployeeDetails(token: string): Employee | null {
+        if (token) {
+            const payload = JSON.parse(atob(token.split(".")[1]));
+    
+            return payload.employee;
         }
         return null;
     }

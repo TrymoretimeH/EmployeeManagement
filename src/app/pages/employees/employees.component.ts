@@ -21,6 +21,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { toNumber } from 'ng-zorro-antd/core/util';
 import { DepartmentsService } from '../../services/department/departments.service';
+import { Department } from '../departments/departments.component';
 
 export interface Employee {
   id: number;
@@ -32,13 +33,8 @@ export interface Employee {
   email: string;
   position: string;
   hireDate: string;
-  departmentId: number;
+  department: Department;
   salaryId: number;
-}
-
-interface Department {
-  departmentId: number;
-  departmentName: string;
 }
 
 interface Salary {
@@ -85,20 +81,7 @@ export class EmployeesComponent {
     departmentId: FormControl<number>;
     salaryId: FormControl<number>;
   }>;
-  listOfDepartments: Department[] = [
-    {
-      departmentId: 1,
-      departmentName: 'IT',
-    },
-    {
-      departmentId: 2,
-      departmentName: 'HR',
-    },
-    {
-      departmentId: 3,
-      departmentName: 'Finance',
-    },
-  ];
+  listOfDepartments: Department[] = [];
   listOfSalarys: Salary[] = [
     {
       salaryId: 1,
@@ -189,7 +172,7 @@ export class EmployeesComponent {
         email: data.email,
         position: data.position,
         hireDate: data.hireDate,
-        departmentId: data.departmentId,
+        departmentId: data.department.departmentId,
         salaryId: data.salaryId,
       });
     } else {
