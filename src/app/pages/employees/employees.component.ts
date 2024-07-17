@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { EmployeeService } from '../../services/employee/employee.service';
 import { NzButtonModule } from 'ng-zorro-antd/button';
@@ -64,9 +64,9 @@ interface Salary {
 })
 export class EmployeesComponent {
   listOfEmployees: Employee[] = [];
-  empService: EmployeeService = new EmployeeService();
+  empService: EmployeeService = Inject(EmployeeService);
   currentEmp: Employee | undefined = undefined;
-  depService: DepartmentsService = new DepartmentsService()
+  depService: DepartmentsService = Inject(DepartmentsService)
 
   isVisible = false;
   employeeForm: FormGroup<{
