@@ -8,11 +8,15 @@ import { Employee } from '../../pages/employees/employees.component';
   providedIn: 'root'
 })
 export class EmployeeService {
+  
+  
   private empUrl = 'http://localhost:8094/api/employee';
   private http = inject(HttpClient);
   private httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
+
+  private provinceUrl = 'https://vapi.vnappmob.com'
 
   constructor() {
    }
@@ -36,6 +40,18 @@ export class EmployeeService {
   getAll(): Observable<Employee[]> {
     this.setHttpOptions();
     return this.http.get<Employee[]>(`${this.empUrl}/all`, this.httpOptions)
+  }
+
+  getProvince() {
+    return this.http.get(`${this.provinceUrl}/api/province`);
+  }
+
+  getDistrict(proId: number) {
+    return this.http.get(`${this.provinceUrl}/api/province/district/${proId}`);
+  }
+
+  getWard(disId: number) {
+    return this.http.get(`${this.provinceUrl}/api/province/ward/${disId}`);
   }
 
   add(em: any): Observable<Employee> {

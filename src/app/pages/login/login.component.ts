@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { tokenUtil } from '../../utils/token/token';
+import { AuthService } from '../../services/auth/auth.service';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,9 @@ import { tokenUtil } from '../../utils/token/token';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  isLoggedIn = false;
+  roles = [];
   
   loginObj: any = {
     "email": "",
@@ -20,22 +24,32 @@ export class LoginComponent {
 
   http = inject(HttpClient);
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService, private storageService: StorageService) {}
+  ngOnInit(): void {
+    if (this.storageService.isLoggedIn()) {
+      this.isLoggedIn = true;
+      this.roles = this.storageService.getUser()?.roles;
+    }
+  }
 
   onLogin() {
-    this.http.post("http://localhost:8094/auth/generateToken", this.loginObj, {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    
-    }).subscribe((res: any) => {
-      if (res.isSuccess) {
-        
-        tokenUtil.setToken(res.data.token);
-        // localStorage.setItem("token", res.data.token);
-        this.router.navigateByUrl("employees")
+    const { email, password } = this.loginObj;
+
+    this.authService.login(email, password).subscribe({
+      next: data => {
+        this.storageService.saveUser(data);
+        this.isLoggedIn = true;
+        this.roles = this.storageService.getUser()?.roles;
+        this.reloadPage();
+      },
+      error: err => {
+        console.error('Error:', err);
       }
     })
+  }
+
+  reloadPage(): void {
+    window.location.reload();
   }
 
 }

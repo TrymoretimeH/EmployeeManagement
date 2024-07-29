@@ -3,7 +3,6 @@ import { CanActivateFn, Router } from '@angular/router';
 import { tokenUtil } from '../../utils/token/token';
 
 export const authGuard: CanActivateFn = (route, state) => {
-
   const router = inject(Router);
 
 
@@ -11,24 +10,29 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (token != null) {
     const isExpired = checkTokenExpiration(token);
     const jsonPayload = getTokenPayload(token);
-    if (!isExpired) {
-      let roles = tokenUtil.getRoles(token)
-      if (roles.includes("ADMIN") || roles.includes("USER")) {
-        return true;
-      }
+    
+    // test angular without api support
+    return true;
+    
+    // if (!isExpired) {
+    //   let roles = tokenUtil.getRoles(token)
+    //   if (roles.includes("ADMIN") || roles.includes("USER")) {
+    //     return true;
+    //   }
       
-      router.navigateByUrl("dashboard")
-      return false;
-    } else {
-      tokenUtil.removeToken();
-      router.navigateByUrl("/login");
-      return false;
-    }
+    //   router.navigateByUrl("dashboard")
+    //   return false;
+    // } else {
+    //   tokenUtil.removeToken();
+    //   router.navigateByUrl("/login");
+    //   return false;
+    // }
 
   } else {
     router.navigateByUrl("/login");
     return false;
   }
+
 };
 
 function checkTokenExpiration(token: string): boolean {
