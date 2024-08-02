@@ -11,7 +11,8 @@ export class DepartmentsService {
   private depUrl = 'http://localhost:8094/api/department';
   private http = inject(HttpClient);
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    withCredentials: true,
   }
   constructor() { }
 
@@ -22,11 +23,13 @@ export class DepartmentsService {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`  // Use Bearer authentication scheme
-        })
+        }),
+        withCredentials: true,
       }; 
     } else {
       this.httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        withCredentials: true,
       };
     }
   }

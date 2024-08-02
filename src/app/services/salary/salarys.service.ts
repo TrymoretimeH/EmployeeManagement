@@ -17,7 +17,8 @@ export class SalarysService {
   private salUrl = 'http://localhost:8094/api/salary';
   private http = inject(HttpClient);
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    withCredentials: true,
   }
   constructor() { }
 
@@ -28,11 +29,13 @@ export class SalarysService {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`  // Use Bearer authentication scheme
-        })
+        }),
+        withCredentials: true,
       }; 
     } else {
       this.httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        withCredentials: true,
       };
     }
   }

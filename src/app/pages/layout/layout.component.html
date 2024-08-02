@@ -7,7 +7,12 @@
       <span nz-icon nzType="poweroff" nzTheme="outline"></span>
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
-      <li nz-menu-item routerLink="/employees" [nzSelected]="currentUrl === '/employees'">
+      @if (isAdmin) {
+      <li
+        nz-menu-item
+        routerLink="/employees"
+        [nzSelected]="currentUrl === '/employees'"
+      >
         <span nz-icon nzType="team"></span>
         <span>Employees</span>
       </li>
@@ -17,18 +22,33 @@
             <li nz-menu-item>Team 2</li>
           </ul>
         </li> -->
-      <li nz-menu-item routerLink="/departments" [nzSelected]="currentUrl === '/departments'">
+      <li
+        nz-menu-item
+        routerLink="/departments"
+        [nzSelected]="currentUrl === '/departments'"
+      >
         <span nz-icon nzType="apartment"></span>
         <span>Departments</span>
       </li>
-      <li nz-menu-item routerLink="/salarys" [nzSelected]="currentUrl === '/salarys'">
+      <li
+        nz-menu-item
+        routerLink="/salarys"
+        [nzSelected]="currentUrl === '/salarys'"
+      >
         <span nz-icon nzType="money-collect"></span>
         <span>Salarys</span>
       </li>
       <li nz-menu-divider></li>
-      <li nz-menu-item routerLink="/attendances" [nzSelected]="currentUrl === '/attendances'">
+      } @if (isUser || isAdmin) {
+      <li
+        nz-menu-item
+        routerLink="/attendances"
+        [nzSelected]="currentUrl === '/attendances'"
+      >
         <span nz-icon nzType="clock-circle"></span>
         <span>Attendances</span>
+      </li>
+      }
     </ul>
   </nz-sider>
   <nz-layout>
@@ -54,12 +74,11 @@
         <nz-dropdown-menu #menu="nzDropdownMenu">
           <ul nz-menu>
             @if (this.email) {
-              <li nz-menu-item>{{ this.email }}</li>
-              <li nz-menu-divider></li>
-              <li nz-menu-item (click)="logout()">Logout</li>
-            }
-            @else {
-              <li nz-menu-item (click)="login()">Login</li>
+            <li nz-menu-item>{{ this.email }}</li>
+            <li nz-menu-divider></li>
+            <li nz-menu-item (click)="logout()">Logout</li>
+            } @else {
+            <li nz-menu-item (click)="login()">Login</li>
             }
             <!-- <li nz-submenu nzTitle="sub menu">
               <ul>
@@ -73,7 +92,6 @@
                 <li nz-menu-item>4th menu item</li>
               </ul>
             </li> -->
-
           </ul>
         </nz-dropdown-menu>
       </div>

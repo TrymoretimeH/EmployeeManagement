@@ -5,13 +5,16 @@ import { Observable } from 'rxjs';
 const AUTH_API = 'http://localhost:8094/api/auth';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  // withCredentials: true
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  
 
   constructor(private http: HttpClient) { }
 
@@ -22,7 +25,10 @@ export class AuthService {
         email,
         password
       },
-      httpOptions
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        withCredentials: true
+      }
     )
   }
 
@@ -30,7 +36,9 @@ export class AuthService {
     return this.http.post(
       AUTH_API + '/signout',
       {},
-      httpOptions
+      {
+        withCredentials: true
+      }
     )
   }
 
@@ -38,7 +46,9 @@ export class AuthService {
     return this.http.post(
       AUTH_API + '/refreshtoken',
       {},
-      httpOptions
+      {
+        withCredentials: true
+      }
     )
   }
 

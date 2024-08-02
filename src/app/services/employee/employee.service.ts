@@ -13,7 +13,9 @@ export class EmployeeService {
   private empUrl = 'http://localhost:8094/api/employee';
   private http = inject(HttpClient);
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    withCredentials: true,
+    
   }
 
   private provinceUrl = 'https://vapi.vnappmob.com'
@@ -22,50 +24,50 @@ export class EmployeeService {
    }
 
   private setHttpOptions(): any {
-    const token = localStorage.getItem("token");
-    if (token) {
-      this.httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`  // Use Bearer authentication scheme
-        })
-      }; 
-    } else {
-      this.httpOptions = {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-      };
-    }
+    // const token = localStorage.getItem("token");
+    // if (token) {
+    //   this.httpOptions = {
+    //     headers: new HttpHeaders({
+    //       'Content-Type': 'application/json',
+    //       'Authorization': `Bearer ${token}`  // Use Bearer authentication scheme
+    //     })
+    //   }; 
+    // } else {
+    //   this.httpOptions = {
+    //     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+    //   };
+    // }
   }
 
   getAll(): Observable<Employee[]> {
-    this.setHttpOptions();
+    // this.setHttpOptions();
     return this.http.get<Employee[]>(`${this.empUrl}/all`, this.httpOptions)
   }
 
   getProvince() {
-    return this.http.get(`${this.provinceUrl}/api/province`);
+    return this.http.get(`${this.provinceUrl}/api/province`, this.httpOptions);
   }
 
   getDistrict(proId: number) {
-    return this.http.get(`${this.provinceUrl}/api/province/district/${proId}`);
+    return this.http.get(`${this.provinceUrl}/api/province/district/${proId}`, this.httpOptions);
   }
 
   getWard(disId: number) {
-    return this.http.get(`${this.provinceUrl}/api/province/ward/${disId}`);
+    return this.http.get(`${this.provinceUrl}/api/province/ward/${disId}`, this.httpOptions);
   }
 
   add(em: any): Observable<Employee> {
-    this.setHttpOptions();
-    return this.http.post<Employee>(`${this.empUrl}/add`, em , this.httpOptions);
+    // this.setHttpOptions();
+    return this.http.post<Employee>(`${this.empUrl}/add`, em, this.httpOptions);
   }
 
   update(em: any): Observable<Employee> {
-    this.setHttpOptions();
+    // this.setHttpOptions();
     return this.http.put<Employee>(`${this.empUrl}/update`, em, this.httpOptions);
   }
 
   delete(id: number): Observable<any> {
-    this.setHttpOptions();
+    // this.setHttpOptions();
     return this.http.delete<any>(`${this.empUrl}/delete/${id}`, this.httpOptions);
   }
 }

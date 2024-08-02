@@ -1,15 +1,23 @@
-import { inject } from '@angular/core';
+import { Inject, inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { tokenUtil } from '../../utils/token/token';
+import { StorageService } from '../../services/storage/storage.service';
 
 export const authGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
+  
 
-  const token = localStorage.getItem("token");
-  if (token != null) {
-    const isExpired = checkTokenExpiration(token);
-    const jsonPayload = getTokenPayload(token);
+
+  
+  const storageService = new StorageService();
+
+  const isLoggedIn = storageService.isLoggedIn();
+
+  // const token = localStorage.getItem("token");
+  if (isLoggedIn) {
+    // const isExpired = checkTokenExpiration(token);
+    // const jsonPayload = getTokenPayload(token);
     
     // test angular without api support
     return true;

@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
         this.storageService.saveUser(data);
         this.isLoggedIn = true;
         this.roles = this.storageService.getUser()?.roles;
-        this.reloadPage();
+        this.router.navigate(['/dashboard']);
       },
       error: err => {
         console.error('Error:', err);
