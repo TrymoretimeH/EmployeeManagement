@@ -1,0 +1,168 @@
+<!-- <div nz-flex nzJustify="flex-end">
+  <button
+    (click)="showModal()"
+    class="user-btn-add"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
+    Add new
+  </button>
+</div> -->
+<nz-table
+  class="scroll-x user-content-wrapper"
+  [nzData]="Users"
+  #UserTable
+  [nzScroll]="{ y: '620px' }"
+>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Roles</th>
+      <th>Employee</th>
+      <th nzRight>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of UserTable.data">
+      @if (data.id == getIdFromCurrentLoggedUser()) {
+        <td class="color-disabled" [nzDisabled]="true">{{ data.id }}</td>
+        <td class="color-disabled" [nzDisabled]="true">{{ data.name }}</td>
+        <td class="color-disabled" [nzDisabled]="true">{{ data.email }}</td>
+        <td class="color-disabled" [nzDisabled]="true">{{ data.roles }}</td>
+        <td class="color-disabled" [nzDisabled]="true">{{ getNameForEmp(data.employee) }}</td>
+        <td nzRight class="color-disabled" [nzDisabled]="true">
+          <span
+            style="margin-right: 8px"
+            nz-icon
+            [nzTwotoneColor]="'#bfbfbf'"
+            nzType="edit"
+            nzTheme="twotone"
+          ></span>
+          <span
+            nz-icon
+            nzType="delete"
+            [nzTwotoneColor]="'#bfbfbf'"
+            nzTheme="twotone"
+          ></span>
+      }
+      @else {
+        <td>{{ data.id }}</td>
+        <td>{{ data.name }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.roles }}</td>
+        <td>{{ getNameForEmp(data.employee) }}</td>
+        <td nzRight>
+          <span
+            (click)="showModal(data)"
+            class="cursor-pointer"
+            style="margin-right: 8px"
+            nz-icon
+            nzType="edit"
+            nzTheme="twotone"
+          ></span>
+          <span
+            (click)="showDeleteConfirm(data.id)"
+            class="cursor-pointer"
+            nz-icon
+            nzType="delete"
+            [nzTwotoneColor]="'#e01d1d'"
+            nzTheme="twotone"
+          ></span>
+        </td>
+      }
+    </tr>
+  </tbody>
+</nz-table>
+
+<nz-modal
+  [(nzVisible)]="isVisible"
+  [nzTitle]="this.currentUser ? 'Update a user' : 'Add a new user'"
+  (nzOnCancel)="handleCancel()"
+  (nzOnOk)="handleOk()"
+>
+  <ng-container *nzModalContent>
+    <form
+      nz-form
+      [formGroup]="userForm"
+      [nzAutoTips]="autoTips"
+      (ngSubmit)="submitForm()"
+    >
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="name"
+          >Name</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            formControlName="name"
+            id="name"
+            placeholder="Enter User Name"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email"
+          >Email</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <input
+            nz-input
+            formControlName="email"
+            id="email"
+            placeholder="Enter email"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="roles"
+          >Roles</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <!-- <input
+            nz-input
+            formControlName="roles"
+            id="roles"
+            placeholder="Enter roles"
+          /> -->
+          <nz-select
+            formControlName="roles"
+            nzAllowClear
+            id="roles"
+            nzPlaceHolder="Select Roles"
+          >
+            <nz-option
+              *ngFor="let role of listOfRoles"
+              [nzLabel]="role"
+              [nzValue]="role"
+            ></nz-option>
+          </nz-select>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="employee"
+          >Employee</nz-form-label
+        >
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <nz-input-group class="gr-select">
+            <nz-select
+              formControlName="employee"
+              nzAllowClear
+              id="employee"
+              nzPlaceHolder="Select Employee"
+            >
+              <nz-option
+                *ngFor="let emp of listOfEmps"
+                [nzLabel]="emp.firstName + ' ' + emp.lastName"
+                [nzValue]="emp"
+                onchange="handleChangeEmp(emp)"
+              ></nz-option>
+            </nz-select>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+  </ng-container>
+</nz-modal>

@@ -27,6 +27,7 @@ import { WebcamImage, WebcamInitError, WebcamModule, WebcamUtil } from 'ngx-webc
 import { Observable, Subject } from 'rxjs';
 import { Employee } from '../employees/employees.component';
 import { tokenUtil } from '../../utils/token/token';
+import { StorageService } from '../../services/storage/storage.service';
 
 @Component({
   selector: 'app-attendance',
@@ -52,6 +53,7 @@ import { tokenUtil } from '../../utils/token/token';
   styleUrl: './attendance.component.css'
 })
 export class AttendanceComponent {
+  isAdmin = false;
   employeeDetails: Employee | null = null;
   data: Attendance[] = [];
   empData: any[] = [];
@@ -78,6 +80,7 @@ export class AttendanceComponent {
     private fb: NonNullableFormBuilder,
     private empService: EmployeeService,
     private readonly sanitizer: DomSanitizer,
+    private storageService: StorageService
   ) { 
 
     const { required, min } = Validators;
@@ -162,6 +165,7 @@ export class AttendanceComponent {
       
 
       if (this.currentAttendance != undefined) {
+        if (this.storageService.getUser().roles.includes({ authority: "ADMIN" })) {
         formData.append('attendanceId', this.currentAttendance.attendanceId.toString());
         this.attendanceService
           .update(formData)
@@ -170,6 +174,9 @@ export class AttendanceComponent {
               this.getAll();
             }
           });
+        } else {
+          alert("You are not authorized to update attendance!");
+        }
       } else {
         this.attendanceService.add(formData).subscribe((res: any) => {
           if (res.isSuccess) {
@@ -303,14 +310,9 @@ export class AttendanceComponent {
       })
     });
 
-    this.employeeDetails = tokenUtil.getEmployeeDetails(tokenUtil.getToken());
+    this.isAdmin = this.storageService.getUser().roles.includes({ authority: "ADMIN" });
 
-    if (tokenUtil.getRoles(tokenUtil.getToken()) === "USER") {
-      this.empData = [{
-        employeeName: this.employeeDetails?.firstName + " " + this.employeeDetails?.lastName,
-        employeeId: this.employeeDetails?.id,
-      }]
-    }
+    this.employeeDetails = this.storageService.getUser().employee;
 
   }
 

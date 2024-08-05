@@ -8,6 +8,8 @@ import { authGuard } from './guard/auth/auth.guard';
 import { SalarysComponent } from './pages/salarys/salarys.component';
 import { AttendanceComponent } from './pages/attendance/attendance.component';
 import { adminGuard } from './guard/admin/admin.guard';
+import { RegisterComponent } from './pages/register/register.component';
+import { UsersComponent } from './pages/users/users.component';
 
 export const routes: Routes = [
     {
@@ -20,6 +22,10 @@ export const routes: Routes = [
         component: LoginComponent
     },
     {
+        path: 'signup',
+        component: RegisterComponent
+    },  
+    {
         path: '',
         component: LayoutComponent,
         data: { breadcrumb: 'Layout' },
@@ -28,6 +34,12 @@ export const routes: Routes = [
                 path: 'dashboard',
                 component: DashboardComponent,
                 data: { breadcrumb: 'Dashboard' },
+            },
+            {
+                path: 'users',
+                component: UsersComponent,
+                data: { breadcrumb: 'User' },
+                canActivate: [authGuard, adminGuard]
             },
             {
                 path: 'employees',

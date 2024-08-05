@@ -9,7 +9,12 @@
     Add new
   </button>
 </div>
-<nz-table class="scroll-x atd-content-wrapper" [nzData]="data" #AttendanceTable>
+<nz-table
+  class="scroll-x atd-content-wrapper"
+  [nzData]="data"
+  #AttendanceTable
+  [nzScroll]="{ y: '620px' }"
+>
   <thead>
     <tr>
       <th>ID</th>
@@ -37,7 +42,7 @@
           alt="Attendance Image"
         />
       </td>
-      <td>
+      <td nzRight>
         <a (click)="showModal(data)" style="margin-right: 8px">
           <span nz-icon nzType="edit" nzTheme="twotone"></span>
         </a>
@@ -77,25 +82,20 @@
           >Employee ID</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-input-group
-            class="gr-select"
-            [nzAddOnBefore]="addOnBeforeTemplate"
-          >
-            <ng-template #addOnBeforeTemplate>
-              <nz-select
-                formControlName="employeeId"
-                nzAllowClear
-                id="employeeId"
-                nzPlaceHolder="Select Employee"
-              >
-                <nz-option
-                  *ngFor="let emp of empData"
-                  [nzLabel]="emp.employeeName"
-                  [nzValue]="emp.employeeId"
-                  onchange="handleChangeEmp(emp.employeeId)"
-                ></nz-option>
-              </nz-select>
-            </ng-template>
+          <nz-input-group class="gr-select">
+            <nz-select
+              formControlName="employeeId"
+              nzAllowClear
+              id="employeeId"
+              nzPlaceHolder="Select Employee"
+            >
+              <nz-option
+                *ngFor="let emp of empData"
+                [nzLabel]="emp.employeeName"
+                [nzValue]="emp.employeeId"
+                onchange="handleChangeEmp(emp.employeeId)"
+              ></nz-option>
+            </nz-select>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -127,37 +127,36 @@
         </nz-form-control>
       </nz-form-item>
       @if (this.webcamImage || this.currentImage) {
-        <nz-form-item nz-flex nzJustify="center">
-          <nz-form-control [nzSm]="20" [nzXs]="20">
-            <img
-              style="width: 100%; object-fit: contain; height: auto;"
-              id="displayedImage"
-              [src]="this.webcamImage?.imageAsDataUrl || this.currentImage"
-              alt="Captured Image"
-            />
-          </nz-form-control>
-        </nz-form-item>
-      } 
+      <nz-form-item nz-flex nzJustify="center">
+        <nz-form-control [nzSm]="20" [nzXs]="20">
+          <img
+            style="width: 100%; object-fit: contain; height: auto"
+            id="displayedImage"
+            [src]="this.webcamImage?.imageAsDataUrl || this.currentImage"
+            alt="Captured Image"
+          />
+        </nz-form-control>
+      </nz-form-item>
+      }
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired>Image</nz-form-label>
         <!-- <nz-form-control [nzSm]="14" [nzXs]="24">
           <input (change)="handleChangeFile($event)" type="file" formControlName="image" id="image" />
         </nz-form-control> -->
         @if (!this.isWebcamOpen) {
-          <nz-form-control [nzSm]="14" [nzXs]="24">
-            <button
-              (click)="showWebcam()"
-              nz-button
-              type="button"
-              nzType="primary"
-              nzSize="large"
-              nzShape="round"
-            >
-              Capture Image
-            </button>
-          </nz-form-control>
-          }
-          
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <button
+            (click)="showWebcam()"
+            nz-button
+            type="button"
+            nzType="primary"
+            nzSize="large"
+            nzShape="round"
+          >
+            Capture Image
+          </button>
+        </nz-form-control>
+        }
       </nz-form-item>
       @if (this.isWebcamOpen) {
       <webcam

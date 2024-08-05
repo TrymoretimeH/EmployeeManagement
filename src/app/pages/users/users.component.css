@@ -1,3 +1,7 @@
+.dep-btn-add {
+    margin-right: 16px;
+}
+
 /* .gr-select {
     padding-top: 4px;
     padding-bottom: 4px;
@@ -5,16 +9,12 @@
     border-radius: 2px;
 } */
 
-.atd-content-wrapper {
+.dep-content-wrapper {
     margin-top: 16px;
     margin-right: 16px;
 }
 
-.atd-img {
-    object-fit: contain;
+.color-disabled {
+    color: #bfbfbf;
 }
 
-.atd-btn-add {
-    margin-right: 16px;
-
-}

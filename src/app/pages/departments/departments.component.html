@@ -1,9 +1,20 @@
 <div nz-flex nzJustify="flex-end">
-  <button (click)="showModal()" class="dep-btn-add" nz-button nzType="primary" nzSize="large">
+  <button
+    (click)="showModal()"
+    class="dep-btn-add"
+    nz-button
+    nzType="primary"
+    nzSize="large"
+  >
     Add new
   </button>
 </div>
-<nz-table class="scroll-x dep-content-wrapper" [nzData]="Department" #DepartmentTable>
+<nz-table
+  class="scroll-x dep-content-wrapper"
+  [nzData]="Department"
+  #DepartmentTable
+  [nzScroll]="{ y: '620px' }"
+>
   <thead>
     <tr>
       <th>ID</th>
@@ -19,7 +30,7 @@
       <td>{{ data.departmentName }}</td>
       <td>{{ data.description }}</td>
       <td>{{ getNameForManager(data.managerId) }}</td>
-      <td>
+      <td nzRight>
         <span
           (click)="showModal(data)"
           class="cursor-pointer"
@@ -85,29 +96,23 @@
           >Manager ID</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <nz-input-group
-            class="gr-select"
-            [nzAddOnBefore]="addOnBeforeTemplate"
-          >
-            <ng-template #addOnBeforeTemplate>
-              <nz-select
-                formControlName="managerId"
-                nzAllowClear
-                id="managerId"
-                nzPlaceHolder="Select Manager"
-              >
-                <nz-option
-                  *ngFor="let manager of listOfManagers"
-                  [nzLabel]="manager.firstName + ' ' + manager.lastName"
-                  [nzValue]="manager.id"
-                  onchange="handleChangeManager(manager.id)"
-                ></nz-option>
-              </nz-select>
-            </ng-template>
+          <nz-input-group class="gr-select">
+            <nz-select
+              formControlName="managerId"
+              nzAllowClear
+              id="managerId"
+              nzPlaceHolder="Select Manager"
+            >
+              <nz-option
+                *ngFor="let manager of listOfManagers"
+                [nzLabel]="manager.firstName + ' ' + manager.lastName"
+                [nzValue]="manager.id"
+                onchange="handleChangeManager(manager.id)"
+              ></nz-option>
+            </nz-select>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
-    
     </form>
   </ng-container>
 </nz-modal>

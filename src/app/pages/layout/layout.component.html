@@ -8,6 +8,14 @@
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
       @if (isAdmin) {
+        <li
+        nz-menu-item
+        routerLink="/users"
+        [nzSelected]="currentUrl === '/users'"
+      >
+        <span nz-icon nzType="user"></span>
+        <span>Users</span>
+      </li>
       <li
         nz-menu-item
         routerLink="/employees"

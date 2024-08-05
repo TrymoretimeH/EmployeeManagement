@@ -1,16 +1,17 @@
 .sal-btn-add {
-    
+    margin-right: 16px;
 }
 
-.gr-select {
+/* .gr-select {
     padding-top: 4px;
     padding-bottom: 4px;
     border: 1px solid #d9d9d9;
     border-radius: 2px;
-}
+} */
 
 .salary-content-wrapper {
     /* display: flex; */
     margin-top: 16px;
+    margin-right: 16px;
 
 }

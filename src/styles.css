@@ -1,4 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+.body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 1.5715;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: #f0f2f5;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
@@ -12,11 +21,19 @@
   overflow-x: auto;
 }
 
+.w100p {
+  width: 100%;
+}
+
+.h100p {
+  height: 100%;
+}
+
 /* ::-webkit-scrollbar {
     height: 10px;
 } */
 
-::-webkit-scrollbar
+/* ::-webkit-scrollbar
 {
 	height: 8px;
 }
@@ -25,7 +42,6 @@
 ::-webkit-scrollbar-track {
     border-radius: 100px;
     background-color: #001529;
-    /* background-color: red; */
 }
 
 
@@ -36,4 +52,4 @@
 	border: 1px solid #000000d9;
     border-radius: 100px;
     
-}
+} */
