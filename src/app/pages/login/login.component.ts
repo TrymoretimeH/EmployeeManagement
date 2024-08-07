@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { tokenUtil } from '../../utils/token/token';
 import { AuthService } from '../../services/auth/auth.service';
 import { StorageService } from '../../services/storage/storage.service';
+import { NzIconModule } from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, NzIconModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
     if (this.storageService.isLoggedIn()) {
       this.isLoggedIn = true;
       this.roles = this.storageService.getUser()?.roles;
+      this.router.navigate(['/dashboard']);
     }
   }
 
@@ -46,6 +48,10 @@ export class LoginComponent implements OnInit {
         console.error('Error:', err);
       }
     })
+  }
+
+  goSignupPage(): void {
+    this.router.navigate(['/signup']);
   }
 
   reloadPage(): void {

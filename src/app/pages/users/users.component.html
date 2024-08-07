@@ -121,24 +121,11 @@
           >Roles</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
-          <!-- <input
-            nz-input
-            formControlName="roles"
-            id="roles"
-            placeholder="Enter roles"
-          /> -->
-          <nz-select
-            formControlName="roles"
-            nzAllowClear
-            id="roles"
-            nzPlaceHolder="Select Roles"
-          >
-            <nz-option
-              *ngFor="let role of listOfRoles"
-              [nzLabel]="role"
-              [nzValue]="role"
-            ></nz-option>
-          </nz-select>
+            <nz-checkbox-group formControlName="roles" id="roles">
+              <label nz-checkbox nzValue="ADMIN">Admin</label>
+              <label nz-checkbox nzValue="USER">User</label>
+            </nz-checkbox-group>          
+          
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>

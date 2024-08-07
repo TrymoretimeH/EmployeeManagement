@@ -16,6 +16,8 @@
 }
 
 .logo {
+  display: flex;
+  align-items: center;
   height: 32px;
   margin: 16px 0;
   color: #fff;

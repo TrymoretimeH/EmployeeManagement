@@ -4,7 +4,10 @@
       [className]="isCollapsed ? 'logo logo-fold' : 'logo'"
       routerLink="dashboard"
     >
-      <span nz-icon nzType="poweroff" nzTheme="outline"></span>
+      <span nz-icon nzType="bar-chart" nzTheme="outline"></span>
+      @if(!isCollapsed) {
+        <span>Emp Manage</span>
+      }
     </div>
     <ul nz-menu nzTheme="dark" nzMode="inline">
       @if (isAdmin) {

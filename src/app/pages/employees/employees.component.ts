@@ -23,13 +23,20 @@ import { toNumber } from 'ng-zorro-antd/core/util';
 import { DepartmentsService } from '../../services/department/departments.service';
 import { Department } from '../departments/departments.component';
 import { SalarysService } from '../../services/salary/salarys.service';
+import { Province, ProvinceService } from '../../services/province/province.service';
+import { District, DistrictService } from '../../services/district/district.service';
+import { Ward, WardService } from '../../services/ward/ward.service';
+import { lastValueFrom, Observable } from 'rxjs';
 
 export interface Employee {
   id: number;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  address: string;
+  address: any;
+  province: Province;
+  district: District;
+  ward: Ward;
   phoneNumber: string;
   email: string;
   position: string;
@@ -59,7 +66,6 @@ interface Salary {
     NzDatePickerModule,
     NzSelectModule,
     NzInputModule,
-    
   ],
   templateUrl: './employees.component.html',
   styleUrl: './employees.component.css',
@@ -68,623 +74,20 @@ interface Salary {
 export class EmployeesComponent {
   listOfEmployees: Employee[] = [];
   currentEmp: Employee | undefined = undefined;
-  listOfProvince: any = [
-    {
-      province_id: '92',
-      province_name: 'Thành phố Cần Thơ',
-      province_type: 'Thành phố Trung ương',
-    },
-    {
-      province_id: '48',
-      province_name: 'Thành phố Đà Nẵng',
-      province_type: 'Thành phố Trung ương',
-    },
-    {
-      province_id: '01',
-      province_name: 'Thành phố Hà Nội',
-      province_type: 'Thành phố Trung ương',
-    },
-    {
-      province_id: '31',
-      province_name: 'Thành phố Hải Phòng',
-      province_type: 'Thành phố Trung ương',
-    },
-    {
-      province_id: '79',
-      province_name: 'Thành phố Hồ Chí Minh',
-      province_type: 'Thành phố Trung ương',
-    },
-    {
-      province_id: '89',
-      province_name: 'Tỉnh An Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '77',
-      province_name: 'Tỉnh Bà Rịa - Vũng Tàu',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '95',
-      province_name: 'Tỉnh Bạc Liêu',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '24',
-      province_name: 'Tỉnh Bắc Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '06',
-      province_name: 'Tỉnh Bắc Kạn',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '27',
-      province_name: 'Tỉnh Bắc Ninh',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '83',
-      province_name: 'Tỉnh Bến Tre',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '74',
-      province_name: 'Tỉnh Bình Dương',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '52',
-      province_name: 'Tỉnh Bình Định',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '70',
-      province_name: 'Tỉnh Bình Phước',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '60',
-      province_name: 'Tỉnh Bình Thuận',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '96',
-      province_name: 'Tỉnh Cà Mau',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '04',
-      province_name: 'Tỉnh Cao Bằng',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '66',
-      province_name: 'Tỉnh Đắk Lắk',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '67',
-      province_name: 'Tỉnh Đắk Nông',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '11',
-      province_name: 'Tỉnh Điện Biên',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '75',
-      province_name: 'Tỉnh Đồng Nai',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '87',
-      province_name: 'Tỉnh Đồng Tháp',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '64',
-      province_name: 'Tỉnh Gia Lai',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '02',
-      province_name: 'Tỉnh Hà Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '35',
-      province_name: 'Tỉnh Hà Nam',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '42',
-      province_name: 'Tỉnh Hà Tĩnh',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '30',
-      province_name: 'Tỉnh Hải Dương',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '93',
-      province_name: 'Tỉnh Hậu Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '17',
-      province_name: 'Tỉnh Hoà Bình',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '33',
-      province_name: 'Tỉnh Hưng Yên',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '56',
-      province_name: 'Tỉnh Khánh Hòa',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '91',
-      province_name: 'Tỉnh Kiên Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '62',
-      province_name: 'Tỉnh Kon Tum',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '12',
-      province_name: 'Tỉnh Lai Châu',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '20',
-      province_name: 'Tỉnh Lạng Sơn',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '10',
-      province_name: 'Tỉnh Lào Cai',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '68',
-      province_name: 'Tỉnh Lâm Đồng',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '80',
-      province_name: 'Tỉnh Long An',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '36',
-      province_name: 'Tỉnh Nam Định',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '40',
-      province_name: 'Tỉnh Nghệ An',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '37',
-      province_name: 'Tỉnh Ninh Bình',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '58',
-      province_name: 'Tỉnh Ninh Thuận',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '25',
-      province_name: 'Tỉnh Phú Thọ',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '54',
-      province_name: 'Tỉnh Phú Yên',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '44',
-      province_name: 'Tỉnh Quảng Bình',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '49',
-      province_name: 'Tỉnh Quảng Nam',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '51',
-      province_name: 'Tỉnh Quảng Ngãi',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '22',
-      province_name: 'Tỉnh Quảng Ninh',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '45',
-      province_name: 'Tỉnh Quảng Trị',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '94',
-      province_name: 'Tỉnh Sóc Trăng',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '14',
-      province_name: 'Tỉnh Sơn La',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '72',
-      province_name: 'Tỉnh Tây Ninh',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '34',
-      province_name: 'Tỉnh Thái Bình',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '19',
-      province_name: 'Tỉnh Thái Nguyên',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '38',
-      province_name: 'Tỉnh Thanh Hóa',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '46',
-      province_name: 'Tỉnh Thừa Thiên Huế',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '82',
-      province_name: 'Tỉnh Tiền Giang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '84',
-      province_name: 'Tỉnh Trà Vinh',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '08',
-      province_name: 'Tỉnh Tuyên Quang',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '86',
-      province_name: 'Tỉnh Vĩnh Long',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '26',
-      province_name: 'Tỉnh Vĩnh Phúc',
-      province_type: 'Tỉnh',
-    },
-    {
-      province_id: '15',
-      province_name: 'Tỉnh Yên Bái',
-      province_type: 'Tỉnh',
-    },
-  ];
+  listOfProvince: any = [];
 
-  listOfDistrict: any = [
-    {
-      district_id: '271',
-      district_name: 'Huyện Ba Vì',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '277',
-      district_name: 'Huyện Chương Mỹ',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '273',
-      district_name: 'Huyện Đan Phượng',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '017',
-      district_name: 'Huyện Đông Anh',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '018',
-      district_name: 'Huyện Gia Lâm',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '274',
-      district_name: 'Huyện Hoài Đức',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '250',
-      district_name: 'Huyện Mê Linh',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '282',
-      district_name: 'Huyện Mỹ Đức',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '280',
-      district_name: 'Huyện Phú Xuyên',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '272',
-      district_name: 'Huyện Phúc Thọ',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '275',
-      district_name: 'Huyện Quốc Oai',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '016',
-      district_name: 'Huyện Sóc Sơn',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '276',
-      district_name: 'Huyện Thạch Thất',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '278',
-      district_name: 'Huyện Thanh Oai',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '020',
-      district_name: 'Huyện Thanh Trì',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '279',
-      district_name: 'Huyện Thường Tín',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '281',
-      district_name: 'Huyện Ứng Hòa',
-      district_type: 'Huyện',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '001',
-      district_name: 'Quận Ba Đình',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '021',
-      district_name: 'Quận Bắc Từ Liêm',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '005',
-      district_name: 'Quận Cầu Giấy',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '006',
-      district_name: 'Quận Đống Đa',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '268',
-      district_name: 'Quận Hà Đông',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '007',
-      district_name: 'Quận Hai Bà Trưng',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '002',
-      district_name: 'Quận Hoàn Kiếm',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '008',
-      district_name: 'Quận Hoàng Mai',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '004',
-      district_name: 'Quận Long Biên',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '019',
-      district_name: 'Quận Nam Từ Liêm',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '003',
-      district_name: 'Quận Tây Hồ',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '009',
-      district_name: 'Quận Thanh Xuân',
-      district_type: 'Quận',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-    {
-      district_id: '269',
-      district_name: 'Thị xã Sơn Tây',
-      district_type: 'Thị xã',
-      lat: null,
-      lng: null,
-      province_id: '01',
-    },
-  ];
-  listOfWard: any = [
-    {
-      district_id: '005',
-      ward_id: '00166',
-      ward_name: 'Phường Dịch Vọng',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00167',
-      ward_name: 'Phường Dịch Vọng Hậu',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00163',
-      ward_name: 'Phường Mai Dịch',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00157',
-      ward_name: 'Phường Nghĩa Đô',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00160',
-      ward_name: 'Phường Nghĩa Tân',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00169',
-      ward_name: 'Phường Quan Hoa',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00175',
-      ward_name: 'Phường Trung Hoà',
-      ward_type: 'Phường',
-    },
-    {
-      district_id: '005',
-      ward_id: '00172',
-      ward_name: 'Phường Yên Hoà',
-      ward_type: 'Phường',
-    },
-  ];
+  listOfDistrict: any = [];
+  listOfWard: any = [];
 
   isVisible = false;
   employeeForm: FormGroup<{
     firstName: FormControl<string>;
     lastName: FormControl<string>;
     dateOfBirth: FormControl<string>;
-    address: FormControl<string>;
+    // address: FormControl<string>;
+    // provinceCode: FormControl<string>;
+    // districtCode: FormControl<string>;
+    // wardCode: FormControl<string>;
     province: FormControl<any>;
     district: FormControl<any>;
     ward: FormControl<any>;
@@ -692,7 +95,7 @@ export class EmployeesComponent {
     email: FormControl<string>;
     position: FormControl<string>;
     hireDate: FormControl<string>;
-    departmentId: FormControl<number>;
+    department: FormControl<any>;
     salaryId: FormControl<number>;
   }>;
   listOfDepartments: Department[] = [];
@@ -711,7 +114,10 @@ export class EmployeesComponent {
     private modal: NzModalService,
     private empService: EmployeeService,
     private depService: DepartmentsService,
-    private salService: SalarysService
+    private salService: SalarysService,
+    private provinceService: ProvinceService,
+    private districtService: DistrictService,
+    private wardService: WardService
   ) {
     const { email, required, min } = Validators;
 
@@ -719,15 +125,15 @@ export class EmployeesComponent {
       firstName: ['', [required]],
       lastName: ['', [required]],
       dateOfBirth: ['', [required]],
-      address: ['', [required]],
-      province: [0, [required]],
-      district: [0, [required]],
-      ward: [0, [required]],
+      // address: ['', [required]],
+      province: ['', [required]],
+      district: ['', [required]],
+      ward: ['', [required]],
       phoneNumber: ['', [required]],
       email: ['', [required, email]],
       position: ['', [required]],
       hireDate: ['', [required]],
-      departmentId: [0, [required, min(1)]],
+      department: [null, [required]],
       salaryId: [0, [required, min(1)]],
     });
   }
@@ -761,61 +167,98 @@ export class EmployeesComponent {
   }
 
   handleChangeDep(value: any) {
-    this.employeeForm.controls.departmentId.setValue(toNumber(value));
+    this.employeeForm.controls.department.setValue(value);
   }
   handleChangeSal(value: any) {
     this.employeeForm.controls.salaryId.setValue(toNumber(value));
   }
 
   handleChangeProvince(value: any) {
-    console.log("CHANGED PROVINCE!" + value);
-    this.setAddress();
+    console.log('CHANGED PROVINCE!' + value.name);
+    // this.setAddress();
+    if (this.listOfDistrict.length == 0 || this.listOfDistrict[0]?.provinceCode != value.code) {
+      this.getDistrictByProvinceCode(value.code);
+      this.employeeForm.controls.district.reset();
+    }
+
   }
 
   handleChangeDistrict(value: any) {
-    console.log("CHANGED DISTRICT!");
-    console.log(value);
-    
-    this.employeeForm.controls.province.setValue(value.province_id);
+    console.log('CHANGED DISTRICT!' + value?.name);
+
+    if (this.listOfWard.length == 0 || this.listOfWard[0]?.districtCode != value.code) {
+      this.getWardByDistrictCode(value.code);
+      this.employeeForm.controls.ward.reset();
+    }
+
   }
 
   handleChangeWard(value: any) {
-    console.log("CHANGED WARD!");
-    console.log(value);
-    
-    
-    let district = this.listOfDistrict.find((dis: any) => dis.district_id == value.district_id);
-    this.employeeForm.controls.district.setValue(district);
+    console.log('CHANGED WARD!' + value?.name);
   }
 
   setAddress() {
-    console.log("SET ADDRESS!");
+    console.log('SET ADDRESS!');
     let address = '';
-    let ward = this.listOfWard.find((ward: any) => ward.ward_id == this.employeeForm.value.ward.ward_id);
-    let district = this.listOfDistrict.find((dis: any) => dis.district_id == ward.district_id);
-    let province = this.listOfProvince.find((pro: any) => pro.province_id == district.province_id);
-    address = ward.ward_name + ', ' + district.district_name + ', ' + province.province_name;
-    this.employeeForm.controls.address.setValue(address)
+    let ward = this.listOfWard.find(
+      (ward: any) => ward.ward_id == this.employeeForm.value.ward.ward_id
+    );
+    let district = this.listOfDistrict.find(
+      (dis: any) => dis.district_id == ward.district_id
+    );
+    let province = this.listOfProvince.find(
+      (pro: any) => pro.province_id == district.province_id
+    );
+    // address = ward.ward_name + ', ' + district.district_name + ', ' + province.province_name;
+    // this.employeeForm.controls.address.setValue(address)
   }
 
-
-
-  showModal(data: Employee | null = null): void {
+  async showModal(data: Employee | null = null) { 
     if (data != null) {
       this.currentEmp = data;
+
+      let dep = this.listOfDepartments.find(dep => dep.departmentId === data.department?.departmentId);
+
+      if (dep) {
+        this.currentEmp.department = dep;
+      }
+
+      if (data?.province) {
+        
+        if (this.listOfDistrict.length === 0 || this.listOfDistrict[0]?.provinceCode != data.province.code) {
+          await lastValueFrom(this.getDistrictByProvinceCode(data.province.code));
+        }
+        if (this.listOfWard.length === 0 || this.listOfWard[0]?.districtCode != data.district.code) {
+          await lastValueFrom(this.getWardByDistrictCode(data.district.code));
+        }
+        let province = this.listOfProvince.find((pro: any) => pro.code === data.province.code);
+        if (province) {
+          this.currentEmp.province = province;
+        }
+        let district = this.listOfDistrict.find((dis: any) => dis.code === data.district.code);
+        if (district) {
+          this.currentEmp.district = district;
+        }
+        let ward = this.listOfWard.find((ward: any) => ward.code === data.ward.code);
+        if (ward) {
+          this.currentEmp.ward = ward;
+        }
+      } else {
+      }
+
       this.employeeForm.setValue({
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: data.dateOfBirth,
-        address: data.address,
-        province: '',
-        district: '',
-        ward: '',
+        // address: data.address,
+        province: this.currentEmp.province,
+        district: this.currentEmp.district,
+        ward: this.currentEmp.ward,
         phoneNumber: data.phoneNumber,
         email: data.email,
         position: data.position,
         hireDate: data.hireDate,
-        departmentId: data.department.departmentId,
+        department: this.currentEmp.department,
         salaryId: data.salaryId,
       });
     } else {
@@ -827,6 +270,7 @@ export class EmployeesComponent {
       });
     }
     this.isVisible = true;
+    
   }
 
   handleOk(): void {
@@ -869,7 +313,7 @@ export class EmployeesComponent {
     this.getDeps();
     this.getSal();
 
-    // this.getProvince();
+    this.getProvince();
   }
 
   // getProvince(): void {
@@ -885,7 +329,26 @@ export class EmployeesComponent {
   // }
 
   getAll(): void {
-    this.empService.getAll().subscribe((emps) => (this.listOfEmployees = emps));
+    this.empService.getAll().subscribe(
+      (emps) =>
+        (this.listOfEmployees = emps.map((emp) => {
+          if (emp.province) {
+            return {
+              ...emp,
+              address:
+                emp.ward?.nameEn +
+                ', ' +
+                emp.district?.nameEn +
+                ', ' +
+                emp.province?.nameEn,
+            };
+          }
+          return {
+            ...emp,
+            address: '',
+          }
+        }))
+    );
   }
 
   getDeps(): void {
@@ -896,5 +359,24 @@ export class EmployeesComponent {
 
   getSal(): void {
     this.salService.getAll().subscribe((sals) => (this.listOfSalarys = sals));
+  }
+
+  getProvince(): void {
+    this.provinceService.getAll().subscribe((province) => (this.listOfProvince = province));
+  }
+
+  getDistrictByProvinceCode(provinceCode: string): Observable<unknown> {
+    
+    this.districtService.getByProvinceCode(provinceCode).subscribe((district) => {
+      this.listOfDistrict = district;
+    });
+    return this.districtService.getByProvinceCode(provinceCode)
+  }
+
+  getWardByDistrictCode(districtCode: string): Observable<unknown> {
+    this.wardService.getByDistrictCode(districtCode).subscribe((ward) => {
+      this.listOfWard = ward;
+    });
+    return this.wardService.getByDistrictCode(districtCode);
   }
 }

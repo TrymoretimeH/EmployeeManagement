@@ -16,14 +16,21 @@ interface ItemData {
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent implements OnInit {
-  listOfData: ItemData[] = [];
-  ngOnInit(): void {
-    for (let i = 0; i < 100; i++) {
-      this.listOfData.push({
-        name: `Edward King ${i}`,
-        age: 32,
-        address: `London`
-      });
+  options = {
+    chart: {
+      type: 'line'
+    },
+    series: [{
+      name: 'sales',
+      data: [30,40,35,50,49,60,70,91,125]
+    }],
+    xaxis: {
+      categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
     }
   }
+
+  ngOnInit(): void {
+      
+  } 
+
 }

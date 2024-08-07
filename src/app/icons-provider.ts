@@ -7,6 +7,7 @@ import {
   DashboardOutline,
   HomeOutline,
   PlusOutline,
+  UserOutline
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
@@ -16,6 +17,7 @@ const icons = [
   DashboardOutline,
   HomeOutline,
   PlusOutline,
+  UserOutline
 ];
 
 export function provideNzIcons(): EnvironmentProviders {

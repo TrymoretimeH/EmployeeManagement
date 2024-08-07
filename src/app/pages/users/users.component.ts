@@ -22,10 +22,19 @@ import { EmployeeService } from '../../services/employee/employee.service';
 import { Employee } from '../employees/employees.component';
 import { AuthService, User } from '../../services/auth/auth.service';
 import { StorageService } from '../../services/storage/storage.service';
+import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
 
 export const listOfRoles = [
-  'ADMIN',
-  'USER'
+  {
+    label: 'Admin',
+    value: 'ADMIN',
+    checked: false
+  },
+  {
+    label: 'User',
+    value: 'USER',
+    checked: false
+  }
 ]
 
 @Component({
@@ -43,7 +52,8 @@ export const listOfRoles = [
     NzSelectModule,
     NzInputModule,
     NzFormModule,
-    FormsModule
+    FormsModule,
+    NzCheckboxModule
   ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css',
@@ -85,7 +95,7 @@ export class UsersComponent implements OnInit {
       name: ['', [required]],
       email: ['', [required]],
       password: ['', []],
-      roles: ['', [required]],
+      roles: [this.listOfRoles, []],
       employee: [null, []],
     });
   }
@@ -105,6 +115,7 @@ export class UsersComponent implements OnInit {
             {
               ...this.currentUser,
               employee: this.userForm.controls.employee.value,
+              roles: this.userForm.controls.roles.value.filter((role: any) => role.checked).map((role: any) => role.value).join(','),
             }
           )
           .subscribe((res: any) => {
@@ -137,16 +148,36 @@ export class UsersComponent implements OnInit {
   showModal(data: User | null = null): void {
     if (data != null) {
       this.currentUser = data;
+      let emp = this.listOfEmps.find((emp) => emp.id == this.currentUser?.employee.id);
+      if (emp) {
+        this.currentUser.employee = emp;
+      }
+      
+      
       // this.listOfEmps = this.currentUser.employeeList
       this.userForm.setValue(this.currentUser);
-      this.userForm.controls.employee.setValue(this.currentUser.employee.id);
+      // this.userForm.controls.employee.setValue(this.currentUser.employee);
+      
+      this.listOfRoles.map((role) => {
+        if (this.currentUser?.roles.includes(role.value)) {
+          role.checked = true;
+        } else {
+          role.checked = false;
+        }
+      })
+
+      this.userForm.controls.roles.setValue(this.listOfRoles);
+
     } else {
-      // this.currentUser = undefined;
-      // this.userForm.reset();
-      // Object.values(this.userForm.controls).forEach((control) => {
-      //   control.markAsPristine();
-      //   control.updateValueAndValidity({ onlySelf: true });
-      // });
+      this.listOfRoles.map((role) => {
+        role.checked = false;
+      })
+      this.currentUser = undefined;
+      this.userForm.reset();
+      Object.values(this.userForm.controls).forEach((control) => {
+        control.markAsPristine();
+        control.updateValueAndValidity({ onlySelf: true });
+      });
     }
     this.isVisible = true;
   }

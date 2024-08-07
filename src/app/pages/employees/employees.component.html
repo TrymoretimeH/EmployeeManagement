@@ -42,7 +42,7 @@
       <td>{{ data.email }}</td>
       <td>{{ data.position }}</td>
       <td>{{ data.hireDate | date : "dd/MM/yyyy" }}</td>
-      <td>{{ data.department.departmentName }}</td>
+      <td>{{ data.department ? data.department.departmentName : 'null' }}</td>
       <td>{{ data.salaryId }}</td>
       <td nzRight>
         <a (click)="showModal(data)" style="margin-right: 8px">
@@ -108,7 +108,7 @@
           <nz-date-picker formControlName="dateOfBirth" id="dateOfBirth" />
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item>
+      <!-- <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="address"
           >Address</nz-form-label
         >
@@ -120,11 +120,11 @@
             placeholder="Enter address"
           />
         </nz-form-control>
-      </nz-form-item>
+      </nz-form-item> -->
       <!-- Province -->
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="province"
-          >Tỉnh/Thành phố</nz-form-label
+          >Province</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-input-group class="gr-select">
@@ -132,13 +132,13 @@
               formControlName="province"
               nzAllowClear
               id="province"
-              nzPlaceHolder="Chọn Tỉnh/Thành phố"
+              nzPlaceHolder="Select Province"
               (ngModelChange)="handleChangeProvince($event)"
             >
               <nz-option
                 *ngFor="let p of listOfProvince"
-                [nzLabel]="p.province_name"
-                [nzValue]="p.province_id"
+                [nzLabel]="p.nameEn"
+                [nzValue]="p"
               ></nz-option>
             </nz-select>
           </nz-input-group>
@@ -147,7 +147,7 @@
       <!-- Quận/Huyện -->
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="district"
-          >Quận/Huyện</nz-form-label
+          >District</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-input-group class="gr-select">
@@ -155,13 +155,13 @@
               formControlName="district"
               nzAllowClear
               id="district"
-              nzPlaceHolder="Chọn Quận/Huyện"
+              nzPlaceHolder="Select District"
               (ngModelChange)="handleChangeDistrict($event)"
             >
               <nz-option
-                *ngFor="let p of listOfDistrict"
-                [nzLabel]="p.district_name"
-                [nzValue]="p"
+                *ngFor="let d of listOfDistrict"
+                [nzLabel]="d.nameEn"
+                [nzValue]="d"
               ></nz-option>
             </nz-select>
           </nz-input-group>
@@ -170,7 +170,7 @@
       <!-- Phường/Xã -->
       <nz-form-item>
         <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="ward"
-          >Phường/Xã</nz-form-label
+          >Ward</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-input-group class="gr-select">
@@ -178,13 +178,13 @@
               formControlName="ward"
               nzAllowClear
               id="ward"
-              nzPlaceHolder="Chọn Phường/Xã"
+              nzPlaceHolder="Select Ward"
               (ngModelChange)="handleChangeWard($event)"
             >
               <nz-option
-                *ngFor="let p of listOfWard"
-                [nzLabel]="p.ward_name"
-                [nzValue]="p"
+                *ngFor="let w of listOfWard"
+                [nzLabel]="w.nameEn"
+                [nzValue]="w"
               ></nz-option>
             </nz-select>
           </nz-input-group>
@@ -233,22 +233,22 @@
         </nz-form-control>
       </nz-form-item>
       <nz-form-item>
-        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="departmentId"
-          >Department ID</nz-form-label
+        <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="department"
+          >Department</nz-form-label
         >
         <nz-form-control [nzSm]="14" [nzXs]="24">
           <nz-input-group class="gr-select">
             <nz-select
-              formControlName="departmentId"
+              formControlName="department"
               nzAllowClear
-              id="departmentId"
+              id="department"
               nzPlaceHolder="Select Department"
             >
               <nz-option
                 *ngFor="let department of listOfDepartments"
                 [nzLabel]="department.departmentName"
-                [nzValue]="department.departmentId"
-                onchange="handleChangeDep(department.departmentId)"
+                [nzValue]="department"
+                onchange="handleChangeDep(department)"
               ></nz-option>
             </nz-select>
           </nz-input-group>
