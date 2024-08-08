@@ -3,7 +3,7 @@ import {
   provideZoneChangeDetection,
   importProvidersFrom,
 } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withEnabledBlockingInitialNavigation, withHashLocation, withInMemoryScrolling, withRouterConfig, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { en_US, provideNzI18n } from 'ng-zorro-antd/i18n';
@@ -15,16 +15,30 @@ import { HTTP_INTERCEPTORS, provideHttpClient, withFetch, withInterceptors, with
 // import { provideClientHydration } from '@angular/platform-browser';
 import { provideNzIcons } from './icons-provider';
 import { AuthInterceptor } from './auth-interceptor';
+import { DropdownModule, SidebarModule } from '@coreui/angular';
+import { IconSetService } from '@coreui/icons-angular';
 
 registerLocaleData(en);
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
+    provideRouter(routes,
+      withRouterConfig({
+        onSameUrlNavigation: 'reload',
+      }),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top',
+        anchorScrolling: 'enabled',
+      }),
+      withEnabledBlockingInitialNavigation(),
+      withViewTransitions(),
+      withHashLocation(),
+    ),
     provideNzIcons(),
     provideNzI18n(en_US),
-    importProvidersFrom(FormsModule),
+    importProvidersFrom(FormsModule, SidebarModule, DropdownModule),
+    IconSetService,
     provideAnimationsAsync(),
     provideHttpClient(
       withInterceptorsFromDi(),

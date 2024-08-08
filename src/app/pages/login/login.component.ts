@@ -45,6 +45,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/dashboard']);
       },
       error: err => {
+        alert('Login failed');
         console.error('Error:', err);
       }
     })

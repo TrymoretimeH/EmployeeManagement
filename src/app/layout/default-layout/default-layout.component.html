@@ -1,0 +1,106 @@
+<!--sidebar-->
+<c-sidebar
+  #sidebar1="cSidebar"
+  class="d-print-none sidebar sidebar-fixed border-end"
+  colorScheme="dark"
+  id="sidebar1"
+  visible
+>
+  <c-sidebar-header class="border-bottom">
+    <c-sidebar-brand [routerLink]="[]">
+      <svg
+        [class]="{ icon: false }"
+        cIcon
+        class="sidebar-brand-full"
+
+        height="48"
+        name="logo"
+        title="Logo"
+        fill="#2dacfb"
+        viewBox="-213.8 -213.8 1496.60 1496.60"
+        style="
+          fill-rule: evenodd;
+          clip-rule: evenodd;
+          stroke-linejoin: round;
+          stroke-miterlimit: 2;
+        "
+        version="1.1"
+        xml:space="preserve"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:serif="http://www.serif.com/"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        stroke="#2dacfb"
+        stroke-width="0.010690000000000002"
+        transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
+      ></svg>
+      <svg
+        cIcon
+        class="sidebar-brand-narrow"
+
+        height="48"
+        name="signet"
+        title="Logo"
+        fill="#2dacfb"
+        viewBox="-213.8 -213.8 1496.60 1496.60"
+        style="
+          fill-rule: evenodd;
+          clip-rule: evenodd;
+          stroke-linejoin: round;
+          stroke-miterlimit: 2;
+        "
+        version="1.1"
+        xml:space="preserve"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:serif="http://www.serif.com/"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        stroke="#2dacfb"
+        stroke-width="0.010690000000000002"
+        transform="matrix(1, 0, 0, 1, 0, 0)rotate(0)"
+      ></svg>
+    </c-sidebar-brand>
+  </c-sidebar-header>
+
+  <ng-scrollbar
+    #scrollbar="ngScrollbar"
+    (updated)="onScrollbarUpdate(scrollbar.state)"
+    class="overflow"
+    pointerEventsMethod="scrollbar"
+    visibility="hover"
+  >
+    <c-sidebar-nav
+      #overflow
+      [navItems]="navItems"
+      dropdownMode="close"
+      compact
+    />
+  </ng-scrollbar>
+  @if (!sidebar1.narrow) {
+  <c-sidebar-footer
+    cSidebarToggle="sidebar1"
+    class="border-top d-none d-lg-flex"
+    toggle="unfoldable"
+    style="cursor: pointer"
+  >
+    <button cSidebarToggler aria-label="Toggle sidebar fold"></button>
+  </c-sidebar-footer>
+  }
+</c-sidebar>
+
+<!--main-->
+<div class="wrapper d-flex flex-column min-vh-100">
+  <!--app-header-->
+  <app-default-header
+    [cShadowOnScroll]="'sm'"
+    class="mb-4 d-print-none header header-sticky p-0 shadow-sm"
+    position="sticky"
+    sidebarId="sidebar1"
+  />
+  <!--app-body-->
+  <div class="body flex-grow-1">
+    <c-container breakpoint="lg" class="h-auto px-4">
+      <router-outlet />
+    </c-container>
+  </div>
+  <!--app footer-->
+  <app-default-footer />
+</div>

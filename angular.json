@@ -17,9 +17,11 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
+              "@angular/localize/init",
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "preserveSymlinks": true,
             "assets": [
               {
                 "glob": "**/*",
@@ -34,7 +36,8 @@
             ],
             "styles": [
               "src/theme.less",
-              "src/styles.css"
+              "src/styles.css",
+              "src/scss/styles.scss"
             ],
             "scripts": []
           },
@@ -43,8 +46,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "6mb",
+                  "maximumError": "7mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -82,17 +85,21 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "src/scss/styles.scss"
             ],
             "scripts": [
             ]

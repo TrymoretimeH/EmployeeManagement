@@ -11,6 +11,8 @@ import { adminGuard } from './guard/admin/admin.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { UsersComponent } from './pages/users/users.component';
 
+import { DefaultLayoutComponent } from './layout'
+
 export const routes: Routes = [
     {
         path: '',
@@ -27,8 +29,10 @@ export const routes: Routes = [
     },  
     {
         path: '',
-        component: LayoutComponent,
-        data: { breadcrumb: 'Layout' },
+        component: DefaultLayoutComponent,
+        data: { 
+            title: 'Home',
+            breadcrumb: 'Layout' },
         children: [
             {
                 path: 'dashboard',
